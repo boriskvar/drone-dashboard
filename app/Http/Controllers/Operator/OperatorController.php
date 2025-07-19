@@ -18,7 +18,43 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        return view('operator.index');
-        // return response()->json(['status' => 'operator']); // Упрощенный ответ для теста
+        $menuItems = [
+            [
+                'title' => 'Панель оператора',
+                'url' => route('operator.index'),
+                'route' => 'operator.index'
+            ],
+            [
+                'title' => 'Карта дронов',
+                'url' => route('operator.map'),
+                'route' => 'operator.map'
+            ]
+        ];
+
+        return view('operator.index', [
+            'menuItems' => $menuItems,
+            'activeTitle' => 'Панель оператора'
+        ]);
+    }
+
+    public function map()
+    {
+        $menuItems = [
+            [
+                'title' => 'Панель оператора',
+                'url' => route('operator.index'),
+                'route' => 'operator.index'
+            ],
+            [
+                'title' => 'Карта дронов',
+                'url' => route('operator.map'),
+                'route' => 'operator.map'
+            ]
+        ];
+
+        return view('operator.map', [
+            'menuItems' => $menuItems,
+            'activeTitle' => 'Карта дронов'
+        ]);
     }
 }

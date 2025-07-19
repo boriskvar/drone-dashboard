@@ -1,24 +1,23 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
-{{-- Подключаем ТОЛЬКО Bootstrap для этой страницы --}}
-@section('styles')
-@vite(['resources/css/bootstrap.css'])
-@endsection
+@section('title', 'Панель оператора')
 
-@section('header')
-<h1 class="text-2xl font-bold">Панель оператора</h1>
-@endsection
+@section('header', 'Панель оператора')
 
 @section('content')
-<!-- Используем Bootstrap-классы -->
-<div class="container mt-4">
-    <div class="card">
-        <div class="card-header bg-primary text-white">
-            Управление дронами
-        </div>
+<div class="container-fluid">
+    <div class="card shadow">
         <div class="card-body">
-            <p>Контент панели оператора...</p>
+            <h3 class="card-title">Текущие задания</h3>
+            <!-- Контент страницы -->
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+// Скрипты для этой страницы
+console.log('Main layout loaded');
+</script>
 @endsection

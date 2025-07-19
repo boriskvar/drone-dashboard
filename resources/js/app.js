@@ -1,7 +1,14 @@
-import './bootstrap';
+import './main';
 
 import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 
 Alpine.start();
+
+// resources/js/app.js
+document.querySelectorAll('.sidebar a').forEach(link => {
+    if (link.href === window.location.href) {
+        link.classList.add('nav-item-active');
+    }
+});

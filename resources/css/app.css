@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Анимация активного пункта меню */
+.nav-item-active {
+    transform: translateX(4px);
+    border-left: 4px solid #3b82f6;
+}

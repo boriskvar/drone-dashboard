@@ -7,8 +7,8 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',    // Tailwind (для Breeze)
                 'resources/js/app.js',     // Breeze JS
-                'resources/css/bootstrap.css', // Ваш Bootstrap
-                'resources/js/bootstrap.js'    // Bootstrap JS
+                'resources/css/main.css', // Ваш Main CSS
+                'resources/js/main.js'    // Main JS
             ],
             refresh: true,
         }),

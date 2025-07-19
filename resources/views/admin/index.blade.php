@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.main')
 
 @section('styles')
 @vite(['resources/css/bootstrap.css'])
