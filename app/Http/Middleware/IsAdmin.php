@@ -20,10 +20,10 @@ class IsAdmin
             abort(403, 'Доступ запрещён');
         } */
 
-        if ($request->user()?->is_admin) {
-            return redirect('/admin'); // Или abort(403)
+        if (! $request->user()?->isAdmin()) {
+            abort(403, 'Доступ запрещён'); // или redirect('/dashboard')
         }
 
-        return $next($request);
+        return $next($request); // доступ разрешён
     }
 }

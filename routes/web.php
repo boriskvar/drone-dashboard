@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Operator\OperatorController;
+use App\Http\Controllers\Admin\AdminController;
 
 // Главный редирект (на dashboard или operator - выбирайте)
 Route::redirect('/', '/dashboard'); // Или '/operator'
