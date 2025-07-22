@@ -38,6 +38,8 @@
         </main>
     </div>
 
+    <!-- Общие скрипты Blade -->
+    @yield('scripts') {{-- вот сюда! --}}
     <!-- Скрипты -->
     @stack('scripts')
 </body>

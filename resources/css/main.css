@@ -1,6 +1,11 @@
 @import 'bootstrap/dist/css/bootstrap.min.css';
 
 /* Кастомные стили */
+/* Твои собственные стили ниже */
+body {
+    background-color: #f8f9fa;
+}
+
 .hover-bg-gray-700:hover {
     background-color: #495057;
 }

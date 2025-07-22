@@ -1,6 +1,6 @@
 <template>
     <div class="alert alert-primary">
-        ✅ Пример Vue-компонента работает!
+        Привет из Vue-компонента!
     </div>
 </template>
 
@@ -15,6 +15,6 @@ export default {
 
 <style scoped>
 .alert {
-    font-size: 1.1rem;
+    margin-top: 1rem;
 }
 </style>

@@ -1,7 +1,9 @@
 @extends('layouts.main')
 
+@section('title', 'Админ-панель')
+
 @section('styles')
-@vite(['resources/css/bootstrap.css'])
+@vite('resources/css/main.css')
 @endsection
 
 @section('content')
@@ -13,10 +15,18 @@
     </ul>
 
     <div class="mt-3">
-        <!-- Bootstrap-таблица -->
         <table class="table table-striped">
-            ...
+            <!-- ... -->
         </table>
     </div>
+
+    <!-- Vue-компонент -->
+    <div id="app" class="mt-4">
+        <example-component></example-component>
+    </div>
 </div>
+@endsection
+
+@section('scripts')
+@vite('resources/js/main.js')
 @endsection

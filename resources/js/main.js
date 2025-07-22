@@ -1,3 +1,5 @@
+import 'bootstrap/dist/js/bootstrap.bundle.min'; // Bootstrap JS
+
 import axios from 'axios';
 import { createApp } from 'vue';
 import ExampleComponent from './components/ExampleComponent.vue';
@@ -6,14 +8,21 @@ import ExampleComponent from './components/ExampleComponent.vue';
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-// --- Vue-приложение (работает только с #app)
-const app = createApp({});
-app.component('example-component', ExampleComponent);
-app.mount('#app');
+// --- Vue-приложение  на странице, если он нужен
+document.addEventListener('DOMContentLoaded', () => {
+    const el = document.getElementById('app');
+    if (el) {
+        const app = createApp({});
+        app.component('example-component', ExampleComponent);
+        app.mount(el);
+    } else {
+        console.warn('Vue: элемент #app не найден');
+    }
 
-// --- Остальной JS, НЕ внутри Vue
-document.addEventListener('DOMContentLoaded', function () {
-    console.log('Layout ready');
+
+
+    // --- Остальной JS, НЕ внутри Vue
+    console.log('Bootstrap + Vue layout loaded');
 
     // Пример: инициализируем карту вне Vue
     const mapContainer = document.getElementById('map');
