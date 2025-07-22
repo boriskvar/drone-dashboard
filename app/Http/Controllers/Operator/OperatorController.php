@@ -23,10 +23,12 @@ class OperatorController extends Controller
 
     public function map()
     {
-        return view('operator.map', [
-            'menuItems' => $this->getMenuItems(),
-            'activeTitle' => 'Карта дронов'
-        ]);
+        $drones = [
+            ['id' => 1, 'name' => 'Drone A', 'lat' => 50.45, 'lng' => 30.52],
+            ['id' => 2, 'name' => 'Drone B', 'lat' => 50.46, 'lng' => 30.53],
+        ];
+
+        return view('operator.map', compact('drones'));
     }
 
     private function getMenuItems(): array
