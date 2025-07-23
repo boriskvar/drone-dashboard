@@ -28,7 +28,11 @@ class OperatorController extends Controller
             ['id' => 2, 'name' => 'Drone B', 'lat' => 50.46, 'lng' => 30.53],
         ];
 
-        return view('operator.map', compact('drones'));
+        return view('operator.map', [
+            'drones' => $drones,
+            'menuItems' => $this->getMenuItems(), // ✅ общее меню
+            'activeRoute' => 'operator.map'       // ✅ текущий активный
+        ]);
     }
 
     private function getMenuItems(): array

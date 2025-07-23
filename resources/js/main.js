@@ -1,3 +1,5 @@
+import 'leaflet/dist/leaflet.css';
+
 import 'bootstrap/dist/js/bootstrap.bundle.min'; // Bootstrap JS
 
 import axios from 'axios';
@@ -16,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (el) {
         const app = createApp({});
         app.component('example-component', ExampleComponent);
-        app.component('drone-map', DroneMap); // ✅ регистрируем
+        app.component('drone-map', DroneMap);
 
         app.mount(el);
     } else {
