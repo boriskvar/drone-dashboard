@@ -7,12 +7,14 @@ use Illuminate\Foundation\Configuration\Middleware;
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
         web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',         // <-- добавь эту строку
         commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
-            'is_admin' => \App\Http\Middleware\IsAdmin::class, // Используем snake_case для согласованности
+            // 'is_admin' => \App\Http\Middleware\IsAdmin::class, // Используем snake_case для согласованности
+            'admin' => \App\Http\Middleware\IsAdmin::class, // Используем snake_case для согласованности
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

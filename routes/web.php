@@ -1,9 +1,11 @@
 <?php
+// require __DIR__ . '/admin.php';
+require base_path('routes/admin.php');
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Operator\OperatorController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Operator\OperatorController;
 
 // Главный редирект (на dashboard или operator - выбирайте)
 Route::redirect('/', '/dashboard'); // Или '/operator'
@@ -14,6 +16,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+
+
+
 
     // Профиль (из Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -27,9 +33,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Админ-панель
-    Route::middleware('is_admin')->prefix('admin')->name('admin.')->group(function () {
+    /* Route::middleware('is_admin')->prefix('admin')->name('admin.')->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('index');
-    });
+    }); */
 });
 
 require __DIR__ . '/auth.php';
