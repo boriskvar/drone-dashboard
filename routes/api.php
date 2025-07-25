@@ -14,11 +14,14 @@ use App\Http\Controllers\Api\DroneApiController;
     ]);
 }); */
 
+// Отдаёт координаты всех дронов (для карты)
 Route::get('/coordinates', [DroneApiController::class, 'index']);
 
-Route::middleware('auth:sanctum')->prefix('drones')->group(function () {
-    Route::post('/', action: [DroneApiController::class, 'index']);
-    Route::post('/telemetry', [DroneApiController::class, 'store']);
+// Защищённая группа API-маршрутов для отправки телеметрии
+// Route::middleware('auth:sanctum')->prefix('drones')->group(function () {
+Route::prefix('drones')->group(function () {
+    Route::post('/', action: [DroneApiController::class, 'index']);  // например, список всех дронов
+    Route::post('/telemetry', [DroneApiController::class, 'store']); // например, сохранение координат
 });
 
 /* Route::get('/test', function () {

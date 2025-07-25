@@ -12,7 +12,7 @@
 
         @foreach($adminMenuItems as $item)
         <a href="{{ $item['url'] }}"
-           class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
+            class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
             {{ $item['title'] }}
         </a>
         @endforeach

@@ -30,24 +30,55 @@ class DroneApiController extends Controller
         ]);
     } */
 
+    /**
+     * Вернуть список всех дронов с координатами.
+     */
     public function index(): JsonResponse
     {
-        return response()->json(Drone::select('id', 'lat', 'lng')->get());
+        $drones = Drone::select('id', 'lat', 'lng')->get();
+        return response()->json($drones);
     }
 
-    // Пример: принять телеметрию от дрона
-    public function store(Request $request)
+    /**
+     * Сохранить телеметрию от дрона.
+     */
+    public function store(Request $request): JsonResponse
     {
-        // TODO: валидация и логика сохранения
-        return response()->json(['message' => 'Telemetry received'], 201);
+        $validated = $request->validate([
+            'id'    => 'required|exists:drones,id',
+            'lat'   => 'required|numeric',
+            'lng'   => 'required|numeric',
+        ]);
+
+        $drone = Drone::findOrFail($validated['id']);
+        $drone->lat = $validated['lat'];
+        $drone->lng = $validated['lng'];
+        $drone->save();
+
+        return response()->json(['message' => 'Telemetry saved'], 201);
     }
 
-    public function getLatest()
+    /* public function getLatest()
     {
         // Пример: возвращаем координаты первого дрона
         return response()->json([
             'lat' => 50.4501,
             'lng' => 30.5234,
         ]);
+    } */
+
+    /**
+     * Вернуть последние координаты одного дрона (по ID, например).
+     */
+    public function getLatest(Request $request): JsonResponse
+    {
+        $id = $request->input('id');
+        $drone = Drone::select('id', 'lat', 'lng')->find($id);
+
+        if (!$drone) {
+            return response()->json(['message' => 'Drone not found'], 404);
+        }
+
+        return response()->json($drone);
     }
 }

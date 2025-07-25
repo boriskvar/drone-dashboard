@@ -1,5 +1,5 @@
 <?php
-// require __DIR__ . '/admin.php';
+
 require base_path('routes/admin.php');
 
 use Illuminate\Support\Facades\Route;
