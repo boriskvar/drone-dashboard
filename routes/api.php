@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DroneApiController;
+use App\Http\Controllers\Api\ApiTelemetryController;
 
 
 // Route::get('/coordinates', [DroneApiController::class, 'getLatest']);
@@ -22,6 +23,12 @@ Route::get('/coordinates', [DroneApiController::class, 'index']);
 Route::prefix('drones')->group(function () {
     Route::post('/', action: [DroneApiController::class, 'list']);  // список всех дронов (если нужно)
     Route::post('/telemetry', [DroneApiController::class, 'store']); // например, сохранение координат
+
+    // Получить все координаты дрона (трек)
+    Route::get('{id}/track', [ApiTelemetryController::class, 'track']);
+
+    // Приём телеметрии (координаты, высота и т.п.)
+    Route::post('{id}/telemetry', [ApiTelemetryController::class, 'store']);
 });
 
 /* Route::get('/test', function () {

@@ -22,4 +22,9 @@ class Drone extends Model
     {
         return $this->hasMany(DronePosition::class);
     }
+
+    public function telemetries()
+    {
+        return $this->hasMany(Telemetry::class);
+    }
 }
