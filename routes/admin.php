@@ -3,11 +3,21 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDroneController;
 use App\Http\Controllers\Admin\AdminDronePositionController;
+use App\Http\Controllers\Admin\AdminTelemetryController;
 
 // Группируем всё под общим префиксом `admin` + middleware
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
+
+        Route::prefix('telemetries')->group(function () {
+            Route::get('/', [AdminTelemetryController::class, 'index'])->name('admin.telemetries.index');
+            Route::get('/create', [AdminTelemetryController::class, 'create'])->name('admin.telemetries.create');
+            Route::post('/store', [AdminTelemetryController::class, 'store'])->name('admin.telemetries.store');
+            Route::get('{id}/edit', [AdminTelemetryController::class, 'edit'])->name('admin.telemetries.edit');
+            Route::put('{id}', [AdminTelemetryController::class, 'update'])->name('admin.telemetries.update');
+            Route::delete('{id}', [AdminTelemetryController::class, 'destroy'])->name('admin.telemetries.destroy');
+        });
 
         // --- Drones ---
         Route::prefix('drones')->group(function () {
