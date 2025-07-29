@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Models\Drone;
 use Illuminate\Http\Request;
 
-use App\Models\Drone;
+use App\Models\DronePosition;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 
 class DroneApiController extends Controller
 {
@@ -33,16 +34,47 @@ class DroneApiController extends Controller
     /**
      * Вернуть список всех дронов с координатами.
      */
-    public function index(): JsonResponse
+    /*     public function index(): JsonResponse
     {
         $drones = Drone::select('id', 'lat', 'lng')->get();
         return response()->json($drones);
+    } */
+
+    public function index(): JsonResponse
+    {
+        $activeDrones = Drone::where('status', 'active')->get();
+
+        $result = [];
+
+        foreach ($activeDrones as $drone) {
+            $track = \App\Models\DronePosition::where('drone_id', $drone->id)
+                ->orderByDesc('created_at')
+                ->limit(20)
+                ->get(['lat', 'lng'])
+                ->reverse()
+                ->values(); // чтобы индекс был 0,1,2...
+
+            $last = $track->last(); // Последняя точка — как текущее положение
+
+            if ($last) {
+                $result[] = [
+                    'id' => $drone->id,
+                    'name' => $drone->name,
+                    'lat' => $last->lat,
+                    'lng' => $last->lng,
+                    'track' => $track,
+                ];
+            }
+        }
+
+        return response()->json($result);
     }
+
 
     /**
      * Сохранить телеметрию от дрона.
      */
-    public function store(Request $request): JsonResponse
+    /* public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'id'    => 'required|exists:drones,id',
@@ -56,6 +88,31 @@ class DroneApiController extends Controller
         $drone->save();
 
         return response()->json(['message' => 'Telemetry saved'], 201);
+    } */
+
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'drone_id' => 'required|exists:drones,id',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
+        ]);
+
+        // Обновляем координаты дрона в основной таблице (если нужно)
+        Drone::where('id', $data['drone_id'])->update([
+            'lat' => $data['lat'],
+            'lng' => $data['lng'],
+        ]);
+
+        // Сохраняем новую точку трека
+        \App\Models\DronePosition::create([
+            'drone_id' => $data['drone_id'],
+            'lat' => $data['lat'],
+            'lng' => $data['lng'],
+            'created_at' => now(),
+        ]);
+
+        return response()->json(['message' => 'Position stored']);
     }
 
     /* public function getLatest()

@@ -20,7 +20,7 @@ Route::get('/coordinates', [DroneApiController::class, 'index']);
 // Защищённая группа API-маршрутов для отправки телеметрии
 // Route::middleware('auth:sanctum')->prefix('drones')->group(function () {
 Route::prefix('drones')->group(function () {
-    Route::post('/', action: [DroneApiController::class, 'index']);  // например, список всех дронов
+    Route::post('/', action: [DroneApiController::class, 'list']);  // список всех дронов (если нужно)
     Route::post('/telemetry', [DroneApiController::class, 'store']); // например, сохранение координат
 });
 

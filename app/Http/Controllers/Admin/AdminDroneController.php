@@ -74,4 +74,14 @@ class AdminDroneController extends Controller
         $drone->delete();
         return redirect()->route('admin.drones.index');
     }
+
+    public function move(Drone $drone)
+    {
+        // Имитация небольшого сдвига координат
+        $drone->lat += (rand(-5, 5) / 10000);
+        $drone->lng += (rand(-5, 5) / 10000);
+        $drone->save();
+
+        return redirect()->back()->with('success', "Дрон #{$drone->id} сдвинут.");
+    }
 }

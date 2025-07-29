@@ -33,22 +33,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const tracks = {};
     const polylines = {};
 
-    // Цвет по id
-    function getColorById(id) {
-        const colors = ['red', 'blue', 'green', 'orange', 'purple', 'black', 'brown', 'darkcyan', 'magenta'];
-        return colors[id % colors.length];
+    // Плавное перемещение маркера
+    function animateMarker(marker, newLatLng) {
+        const duration = 1000; // 1 секунда
+        const frames = 30;
+        const delay = duration / frames;
+
+        const startLatLng = marker.getLatLng();
+        let frame = 0;
+
+        const deltaLat = (newLatLng.lat - startLatLng.lat) / frames;
+        const deltaLng = (newLatLng.lng - startLatLng.lng) / frames;
+
+        const move = () => {
+            if (frame < frames) {
+                const lat = startLatLng.lat + deltaLat * frame;
+                const lng = startLatLng.lng + deltaLng * frame;
+                marker.setLatLng([lat, lng]);
+                frame++;
+                requestAnimationFrame(move);
+            } else {
+                marker.setLatLng(newLatLng); // в конце точно установить
+            }
+        };
+
+        move();
     }
 
     // Очистка треков
-    document.getElementById('clear-tracks').addEventListener('click', () => {
-        Object.keys(polylines).forEach(id => {
-            if (polylines[id]) {
-                map.removeLayer(polylines[id]);
-                polylines[id] = null;
-            }
-            tracks[id] = [];
+    const clearBtn = document.getElementById('clear-tracks');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', () => {
+            Object.keys(polylines).forEach(id => {
+                if (polylines[id]) {
+                    map.removeLayer(polylines[id]);
+                    polylines[id] = null;
+                }
+                tracks[id] = [];
+            });
         });
-    });
+    }
 
     async function fetchCoordinates() {
         try {
@@ -57,24 +81,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const drones = await response.json();
 
             drones.forEach(drone => {
-                const latlng = [drone.lat, drone.lng];
+                // Проверка на наличие координат
+                if (!drone.lat || !drone.lng || !Array.isArray(drone.track)) return;
 
+                const latlng = [drone.lat, drone.lng];
+                // console.log('Дрон', drone.id, 'координаты', latlng, 'трек:', tracks[drone.id]);
                 // Маркер
                 if (!markers[drone.id]) {
-                    markers[drone.id] = L.marker(latlng).addTo(map).bindPopup(`Дрон #${drone.id}`);
+                    markers[drone.id] = L.marker(latlng).addTo(map).bindPopup(
+                        `Дрон #${drone.id}: ${drone.name || ''}`);
                 } else {
-                    markers[drone.id].setLatLng(latlng);
+                    animateMarker(markers[drone.id], L.latLng(latlng));
                 }
 
-                // Трек
-                if (!tracks[drone.id]) tracks[drone.id] = [];
-                tracks[drone.id].push(latlng);
-                if (tracks[drone.id].length > 20) tracks[drone.id].shift();
+                // Трек (заменяем из API)
+                tracks[drone.id] = drone.track.map(p => [p.lat, p.lng]);
 
-                // Polyline
+                // Polyline (все треки синие)
                 if (!polylines[drone.id]) {
                     polylines[drone.id] = L.polyline(tracks[drone.id], {
-                        color: getColorById(drone.id),
+                        color: 'blue',
                         weight: 3
                     }).addTo(map);
                 } else {
@@ -85,10 +111,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Ошибка при получении координат:', error);
         }
+
+
     }
+
 
     fetchCoordinates();
     setInterval(fetchCoordinates, 3000);
 });
 </script>
+
 @endsection

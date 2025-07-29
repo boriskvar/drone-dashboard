@@ -17,4 +17,9 @@ class Drone extends Model
         'manufacture_date',
         'firmware_version',
     ];
+
+    public function positions()
+    {
+        return $this->hasMany(DronePosition::class);
+    }
 }

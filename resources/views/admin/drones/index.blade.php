@@ -35,7 +35,14 @@
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-sm btn-danger"
-                        onclick="return confirm('Удалить?')">Удалить</button>
+                            onclick="return confirm('Удалить?')">Удалить</button>
+                </form>
+
+
+                <!-- Кнопка "Сдвинуть" -->
+                <form action="{{ url('/admin/drones/' . $drone->id . '/move') }}" method="POST" style="display:inline;">
+                    @csrf
+                    <button type="submit" class="btn btn-sm btn-warning">Сдвинуть</button>
                 </form>
             </td>
         </tr>
