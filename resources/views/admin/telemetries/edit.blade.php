@@ -35,23 +35,42 @@
 
         <div class="mb-3">
             <label for="latitude" class="form-label">Широта (latitude)</label>
-            <input type="text" name="latitude" class="form-control" value="{{ old('latitude', $telemetry->latitude) }}"
-                   required>
+            <input type="text" name="latitude" id="latitude" step="0.0000001" class="form-control" value="{{ old('latitude', $telemetry->latitude) }}"
+                required>
             @error('latitude') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
         <div class="mb-3">
             <label for="longitude" class="form-label">Долгота (longitude)</label>
-            <input type="text" name="longitude" class="form-control"
-                   value="{{ old('longitude', $telemetry->longitude) }}" required>
+            <input type="text" name="longitude" id="longitude" step="0.0000001" class="form-control"
+                value="{{ old('longitude', $telemetry->longitude) }}" required>
             @error('longitude') <div class="text-danger">{{ $message }}</div> @enderror
         </div>
 
-        <div class="mb-3">
+        <!-- <div class="mb-3">
             <label for="altitude" class="form-label">Высота (altitude)</label>
             <input type="text" name="altitude" class="form-control" value="{{ old('altitude', $telemetry->altitude) }}">
             @error('altitude') <div class="text-danger">{{ $message }}</div> @enderror
+        </div> -->
+
+        <div class="mb-3">
+            <label for="altitude" class="form-label">Высота (м)</label>
+            <input type="number" name="altitude" id="altitude" step="0.1" class="form-control"
+                value="{{ old('altitude', $telemetry->altitude) }}">
         </div>
+
+        <div class="mb-3">
+            <label for="speed" class="form-label">Скорость (км/ч)</label>
+            <input type="number" name="speed" id="speed" step="0.1" class="form-control"
+                value="{{ old('speed', $telemetry->speed) }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="heading" class="form-label">Курс (°)</label>
+            <input type="number" name="heading" id="heading" step="0.1" class="form-control"
+                value="{{ old('heading', $telemetry->heading) }}">
+        </div>
+
 
         <button type="submit" class="btn btn-success">Сохранить</button>
         <a href="{{ route('admin.telemetries.index') }}" class="btn btn-secondary">Отмена</a>

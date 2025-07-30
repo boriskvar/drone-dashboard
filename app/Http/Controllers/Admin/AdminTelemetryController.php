@@ -35,6 +35,8 @@ class AdminTelemetryController extends Controller
             'latitude'  => 'required|numeric',
             'longitude' => 'required|numeric',
             'altitude'  => 'nullable|numeric',
+            'speed'     => 'nullable|numeric',
+            'heading'   => 'nullable|numeric',
         ]);
 
         Telemetry::create($validated);
@@ -64,6 +66,8 @@ class AdminTelemetryController extends Controller
             'latitude'  => 'required|numeric',
             'longitude' => 'required|numeric',
             'altitude'  => 'nullable|numeric',
+            'speed'     => 'nullable|numeric',
+            'heading'   => 'nullable|numeric',
         ]);
 
         $telemetry = Telemetry::findOrFail($id);

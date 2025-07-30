@@ -11,6 +11,8 @@ class Telemetry extends Model
         'latitude',
         'longitude',
         'altitude',
+        'speed',
+        'heading',
     ];
 
     public function drone()

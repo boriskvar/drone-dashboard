@@ -14,14 +14,14 @@
         + Добавить координаты
     </a>
 
-    <table class="table">
+    <table class="table table-bordered table-striped">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Дрон</th>
                 <th>Широта</th>
                 <th>Долгота</th>
-                <th>Высота (м)</th>
+                <th>Высота</th>
                 <th>Скорость (км/ч)</th>
                 <th>Курс (°)</th>
                 <th>Время</th>
@@ -29,23 +29,28 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($telemetries as $telemetry)
+            @foreach($telemetries as $t)
             <tr>
-                <td>{{ $telemetry->id }}</td>
-                <td>{{ $telemetry->drone->name ?? $telemetry->drone_id }}</td>
-                <td>{{ $telemetry->latitude }}</td>
-                <td>{{ $telemetry->longitude }}</td>
+                <td>{{ $t->id }}</td>
+                <td>{{ $t->drone->name ?? '—' }}</td>
+                <td>{{ $t->latitude }}</td>
+                <td>{{ $t->longitude }}</td>
                 <td>{{ $telemetry->altitude ?? '-' }}</td>
                 <td>{{ $telemetry->speed ?? '-' }}</td>
                 <td>{{ $telemetry->heading ?? '-' }}</td>
                 <td>{{ $telemetry->created_at->format('Y-m-d H:i:s') }}</td>
                 <td>
-                    <a href="{{ route('admin.telemetries.edit', $telemetry) }}" class="btn btn-sm btn-primary">Редактировать</a>
-                    <form action="{{ route('admin.telemetries.destroy', $telemetry) }}" method="POST" style="display:inline-block">
+                    <a href="{{ route('admin.telemetries.edit', $t->id) }}" class="btn btn-sm btn-outline-primary">
+                        Редактировать
+                    </a>
+
+                    <form action="{{ route('admin.telemetries.destroy', $t->id) }}" method="POST" style="display: inline-block;"
+                        onsubmit="return confirm('Удалить запись #{{ $t->id }}?')">
                         @csrf
                         @method('DELETE')
-                        <button class="btn btn-sm btn-danger" onclick="return confirm('Удалить запись?')">Удалить</button>
+                        <button class="btn btn-sm btn-outline-danger">Удалить</button>
                     </form>
+
                 </td>
             </tr>
             @endforeach

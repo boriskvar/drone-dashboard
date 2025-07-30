@@ -16,7 +16,9 @@ return new class extends Migration
             $table->foreignId('drone_id')->constrained()->onDelete('cascade');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->float('altitude')->nullable();
+            $table->float('altitude')->nullable(); // высота
+            $table->float('speed')->nullable();    // скорость
+            $table->float('heading')->nullable();  // курс (направление)
             $table->timestamps();
         });
     }

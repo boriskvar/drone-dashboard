@@ -16,7 +16,12 @@ use App\Http\Controllers\Api\ApiTelemetryController;
 }); */
 
 // Отдаёт координаты всех дронов (для карты)
-Route::get('/coordinates', [DroneApiController::class, 'index']);
+
+// Для боевого трека (из telemetries)
+Route::get('/coordinates', [ApiTelemetryController::class, 'coordinates']);
+
+// Для тестового трека (из drone_positions)
+Route::get('/positions', [DroneApiController::class, 'index']);
 
 // Защищённая группа API-маршрутов для отправки телеметрии
 // Route::middleware('auth:sanctum')->prefix('drones')->group(function () {
