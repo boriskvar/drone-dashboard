@@ -6,8 +6,10 @@
 <div class="container py-4">
     <h1>Карта дрона (гибридный подход)</h1>
 
-    <div class="mb-3">
+    {{-- Группа кнопок --}}
+    <div class="d-flex gap-2 mb-3">
         <button id="clear-tracks" class="btn btn-warning btn-sm">Очистить треки</button>
+        <button id="set-target-btn" class="btn btn-danger btn-sm">Назначить цель</button>
     </div>
 
     <div id="map" style="height: 500px;"></div>
@@ -24,6 +26,54 @@
 <script src="https://unpkg.com/leaflet-rotatedmarker@0.2.0/leaflet.rotatedMarker.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+
+        let activeDroneId = null;
+        let selectedTargetLatLng = null;
+
+        document.getElementById('set-target-btn').addEventListener('click', async () => {
+            if (!activeDroneId || !selectedTargetLatLng) {
+                alert('Сначала выберите дрон (клик по дрону) и укажите цель (клик по карте)');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/target', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        drone_id: activeDroneId,
+                        lat: selectedTargetLatLng.lat,
+                        lng: selectedTargetLatLng.lng,
+                    })
+                });
+
+                if (response.status !== 200 && response.status !== 201) {
+                    throw new Error(`Ошибка сохранения: статус ${response.status}`);
+                }
+
+                const contentType = response.headers.get("content-type") || "";
+                if (!contentType.includes("application/json")) {
+                    throw new Error("Ответ сервера не в формате JSON");
+                }
+
+                const result = await response.json();
+                console.log('Цель назначена:', result);
+
+                alert('Цель сохранена!\n' +
+                    'Широта: ' + result.target.lat + '\n' +
+                    'Долгота: ' + result.target.lng);
+
+                fetchCoordinates();
+
+            } catch (error) {
+                console.error(error);
+                alert('❌ Не удалось сохранить цель:\n' + error.message);
+            }
+        });
+
 
         // ✅ 1. Сначала объявляем функцию генерации SVG-иконки
         function createDroneIcon(heading = 0) {
@@ -56,12 +106,13 @@
         let targetMarkers = {}; // ✅ сюда вставляем обработчик:
 
         map.on('click', function(e) {
-            if (!window.activeDroneId) {
-                alert("Выбери дрона для назначения цели");
+            if (!activeDroneId) {
+                alert('Сначала выберите дрон (клик по маркеру)');
                 return;
             }
 
             const latlng = e.latlng;
+            selectedTargetLatLng = latlng;
 
             // Удалим старый маркер цели (если был)
             if (targetMarkers[activeDroneId]) {
@@ -75,7 +126,7 @@
                     iconSize: [30, 30],
                     iconAnchor: [15, 15]
                 })
-            }).addTo(map).bindPopup("Цель для дрона #" + activeDroneId).openPopup();
+            }).addTo(map).bindPopup("Новая цель для дрона #" + activeDroneId).openPopup();
 
             // Отправим в API
             fetch('/api/target', {
@@ -170,7 +221,7 @@
                         }).addTo(map).bindPopup(popupContent);
 
                         marker.on('click', () => {
-                            window.activeDroneId = drone.id;
+                            activeDroneId = drone.id;
                             console.log('Выбран дрон #' + drone.id);
                         });
 
