@@ -11,14 +11,18 @@
         ['title' => 'Добавить позицию', 'url' => route('admin.positions.create'), 'route' => 'admin.positions.create'],
 
         ['title' => 'Телеметрия', 'url' => route('admin.telemetries.index'), 'route' => 'admin.telemetries.index'],
-        ['title' => 'Добавить телеметрию', 'url' => route('admin.telemetries.create'), 'route' => 'admin.telemetries.create'],
+        ['title' => 'Добавить телеметрию', 'url' => route('admin.telemetries.create'), 'route' =>
+        'admin.telemetries.create'],
 
+        // Новый раздел — цели
+        ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],
+        ['title' => 'Назначить цель', 'url' => route('admin.targets.create'), 'route' => 'admin.targets.create'],
         ];
         @endphp
 
         @foreach($adminMenuItems as $item)
         <a href="{{ $item['url'] }}"
-            class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
+           class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
             {{ $item['title'] }}
         </a>
         @endforeach

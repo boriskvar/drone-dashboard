@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Drone;
+use App\Models\Target;
 use App\Models\Telemetry;
+use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 
 class ApiTelemetryController extends Controller
 {
@@ -73,6 +74,8 @@ class ApiTelemetryController extends Controller
     }
 
     // Получить координаты всех активных дронов с треками
+
+
     public function coordinates(): JsonResponse
     {
         $activeDrones = Drone::where('status', 'active')->get();
@@ -93,6 +96,9 @@ class ApiTelemetryController extends Controller
                 ->orderByDesc('created_at')
                 ->first(['latitude as lat', 'longitude as lng', 'altitude', 'speed', 'heading', 'created_at']);
 
+            // Берём цель (если есть)
+            $target = Target::where('drone_id', $drone->id)->first(['lat', 'lng']);
+
             if ($last) {
                 $result[] = [
                     'id'         => $drone->id,
@@ -104,6 +110,7 @@ class ApiTelemetryController extends Controller
                     'heading'    => $last->heading,
                     'updated_at' => $last->created_at->toDateTimeString(),
                     'track'      => $track,
+                    'target'     => $target, // null если нет цели
                 ];
             }
         }

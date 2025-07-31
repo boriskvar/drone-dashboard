@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\DroneApiController;
+use App\Http\Controllers\Api\ApiTargetController;
 use App\Http\Controllers\Api\ApiTelemetryController;
 
 
@@ -14,6 +15,8 @@ use App\Http\Controllers\Api\ApiTelemetryController;
         ['id' => 3, 'lat' => 50.4480, 'lng' => 30.5250],
     ]);
 }); */
+
+Route::post('/target', [ApiTargetController::class, 'store']);
 
 // Отдаёт координаты всех дронов (для карты)
 
