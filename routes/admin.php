@@ -3,13 +3,26 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDroneController;
 use App\Http\Controllers\Admin\AdminDronePositionController;
-use App\Http\Controllers\Admin\AdminTelemetryController;
+// use App\Http\Controllers\Admin\AdminTelemetryController;
+use App\Http\Controllers\Admin\Simulate\AdminSimulatePositionController;
 use App\Http\Controllers\Admin\AdminTargetController;
 
 // Группируем всё под общим префиксом `admin` + middleware
+
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
+
+        Route::prefix('simulate-positions')->group(function () {
+            Route::get('/', [AdminSimulatePositionController::class, 'index'])->name('admin.simulate_positions.index');
+            Route::get('/create', [AdminSimulatePositionController::class, 'create'])->name('admin.simulate_positions.create');
+            Route::post('/store', [AdminSimulatePositionController::class, 'store'])->name('admin.simulate_positions.store');
+            Route::get('{id}/edit', [AdminSimulatePositionController::class, 'edit'])->name('admin.simulate_positions.edit');
+            Route::put('{id}', [AdminSimulatePositionController::class, 'update'])->name('admin.simulate_positions.update');
+            Route::delete('{id}', [AdminSimulatePositionController::class, 'destroy'])->name('admin.simulate_positions.destroy');
+        });
+
+
 
         Route::prefix('targets')->group(function () {
             Route::get('/', [AdminTargetController::class, 'index'])->name('admin.targets.index');
@@ -18,15 +31,6 @@ Route::middleware(['auth', 'admin'])
             Route::get('/{id}/edit', [AdminTargetController::class, 'edit'])->name('admin.targets.edit');
             Route::put('/{id}', [AdminTargetController::class, 'update'])->name('admin.targets.update');
             Route::delete('/{id}', [AdminTargetController::class, 'destroy'])->name('admin.targets.destroy');
-        });
-
-        Route::prefix('telemetries')->group(function () {
-            Route::get('/', [AdminTelemetryController::class, 'index'])->name('admin.telemetries.index');
-            Route::get('/create', [AdminTelemetryController::class, 'create'])->name('admin.telemetries.create');
-            Route::post('/store', [AdminTelemetryController::class, 'store'])->name('admin.telemetries.store');
-            Route::get('{id}/edit', [AdminTelemetryController::class, 'edit'])->name('admin.telemetries.edit');
-            Route::put('{id}', [AdminTelemetryController::class, 'update'])->name('admin.telemetries.update');
-            Route::delete('{id}', [AdminTelemetryController::class, 'destroy'])->name('admin.telemetries.destroy');
         });
 
         // --- Drones ---

@@ -10,9 +10,14 @@
         ['title' => 'Позиции дронов', 'url' => route('admin.positions.index'), 'route' => 'admin.positions.index'],
         ['title' => 'Добавить позицию', 'url' => route('admin.positions.create'), 'route' => 'admin.positions.create'],
 
-        ['title' => 'Телеметрия', 'url' => route('admin.telemetries.index'), 'route' => 'admin.telemetries.index'],
-        ['title' => 'Добавить телеметрию', 'url' => route('admin.telemetries.create'), 'route' =>
-        'admin.telemetries.create'],
+
+
+        // Новый раздел — симуляция
+        ['title' => 'Симуляция', 'url' => route('admin.simulate_positions.index'), 'route' =>
+        'admin.simulate_positions.index'],
+        ['title' => 'Добавить симуляцию', 'url' => route('admin.simulate_positions.create'), 'route' =>
+        'admin.simulate_positions.create'],
+
 
         // Новый раздел — цели
         ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],

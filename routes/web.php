@@ -1,14 +1,14 @@
 <?php
 
-require base_path('routes/admin.php');
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Operator\OperatorController;
 
-// Главный редирект (на dashboard или operator - выбирайте)
-Route::redirect('/', '/dashboard'); // Или '/operator'
+// Панель оператора (карта)
+Route::prefix('operator')->name('operator.')->group(function () {
+    Route::get('/', [OperatorController::class, 'index'])->name('index');
+    Route::get('/map', [OperatorController::class, 'map'])->name('map');
+});
 
 // Группа аутентифицированных маршрутов
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -17,25 +17,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 
-
-
-
-
     // Профиль (из Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-    // Панель оператора
-    Route::prefix('operator')->name('operator.')->group(function () {
-        Route::get('/', [OperatorController::class, 'index'])->name('index');
-        Route::get('/map', [OperatorController::class, 'map'])->name('map');
-    });
-
-    // Админ-панель
-    /* Route::middleware('is_admin')->prefix('admin')->name('admin.')->group(function () {
-        Route::get('/', [AdminController::class, 'index'])->name('index');
-    }); */
 });
 
+// Главный редирект (на dashboard или operator - выбирайте)
+// Route::redirect('/', '/dashboard'); // Или '/operator'
+// Редирект на operator по умолчанию
+Route::redirect('/', '/operator');
+
+
+// Админ-маршруты
+require base_path('routes/admin.php');
 require __DIR__ . '/auth.php';

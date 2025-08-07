@@ -1,44 +1,32 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\DroneApiController;
+// use App\Http\Controllers\Api\DroneApiController;  //переименовать старый DroneApiController в SimulateDroneController
+use App\Http\Controllers\Api\Simulate\SimulateDroneController;
 use App\Http\Controllers\Api\ApiTargetController;
-use App\Http\Controllers\Api\ApiTelemetryController;
+use App\Http\Controllers\Api\ApiFlightDataController;
 
+// === 📡 БОЕВЫЕ МАРШРУТЫ ===
 
-// Route::get('/coordinates', [DroneApiController::class, 'getLatest']);
+// Получить актуальные координаты всех дронов
+Route::get('/coordinates', [ApiFlightDataController::class, 'coordinates']);
 
-/* Route::get('/coordinates', function () {
-    return response()->json([
-        ['id' => 1, 'lat' => 50.4501, 'lng' => 30.5234],
-        ['id' => 2, 'lat' => 50.4550, 'lng' => 30.5200],
-        ['id' => 3, 'lat' => 50.4480, 'lng' => 30.5250],
-    ]);
-}); */
+// Получить трек конкретного дрона
+Route::get('/drones/{id}/track', [ApiFlightDataController::class, 'track']);
 
+// Прием новой координаты (или группы) от дрона
+Route::post('/drones/{id}/flight_data', [ApiFlightDataController::class, 'store']);
+
+// Назначить цель дрону
 Route::post('/target', [ApiTargetController::class, 'store']);
 
-// Отдаёт координаты всех дронов (для карты)
+// === 🧪 СИМУЛИРОВАННЫЕ МАРШРУТЫ ===
 
-// Для боевого трека (из telemetries)
-Route::get('/coordinates', [ApiTelemetryController::class, 'coordinates']);
+Route::prefix('simulated')->group(function () {
+    // Тест: список позиций из фейковой таблицы
+    Route::get('/positions', [SimulateDroneController::class, 'index']);
 
-// Для тестового трека (из drone_positions)
-Route::get('/positions', [DroneApiController::class, 'index']);
-
-// Защищённая группа API-маршрутов для отправки телеметрии
-// Route::middleware('auth:sanctum')->prefix('drones')->group(function () {
-Route::prefix('drones')->group(function () {
-    Route::post('/', action: [DroneApiController::class, 'list']);  // список всех дронов (если нужно)
-    Route::post('/telemetry', [DroneApiController::class, 'store']); // например, сохранение координат
-
-    // Получить все координаты дрона (трек)
-    Route::get('{id}/track', [ApiTelemetryController::class, 'track']);
-
-    // Приём телеметрии (координаты, высота и т.п.)
-    Route::post('{id}/telemetry', [ApiTelemetryController::class, 'store']);
+    // Тест: ручная отправка телеметрии
+    Route::post('/drones', [SimulateDroneController::class, 'list']);
+    Route::post('/drones/flight_data', [SimulateDroneController::class, 'store']);
 });
-
-/* Route::get('/test', function () {
-    return response()->json(['message' => 'API работает']);
-}); */

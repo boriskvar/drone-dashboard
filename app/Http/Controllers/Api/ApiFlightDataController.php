@@ -4,12 +4,12 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Drone;
 use App\Models\Target;
-use App\Models\Telemetry;
+// use App\Models\Telemetry;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 
-class ApiTelemetryController extends Controller
+class ApiFlightDataController extends Controller
 {
     // Получить трек дрона
     public function track($id)
