@@ -27,8 +27,8 @@ class AdminDroneController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'lat' => 'required|numeric|between:-90,90',
-            'lng' => 'required|numeric|between:-180,180',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
             'status' => 'required|in:' . implode(',', $this->statusOptions),
             'serial_number' => 'nullable|string|unique:drones,serial_number',
             'model' => 'nullable|string|max:255',
@@ -54,8 +54,8 @@ class AdminDroneController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'lat' => 'required|numeric|between:-90,90',
-            'lng' => 'required|numeric|between:-180,180',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
             'status' => 'required|in:' . implode(',', $this->statusOptions),
             'serial_number' => 'nullable|string|unique:drones,serial_number,' . $drone->id,
             'model' => 'nullable|string|max:255',
@@ -78,8 +78,8 @@ class AdminDroneController extends Controller
     public function move(Drone $drone)
     {
         // Имитация небольшого сдвига координат
-        $drone->lat += (rand(-5, 5) / 10000);
-        $drone->lng += (rand(-5, 5) / 10000);
+        $drone->latitude += (rand(-5, 5) / 10000);
+        $drone->longitude += (rand(-5, 5) / 10000);
         $drone->save();
 
         return redirect()->back()->with('success', "Дрон #{$drone->id} сдвинут.");

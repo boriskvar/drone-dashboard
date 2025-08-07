@@ -23,7 +23,7 @@ class SimulateDroneController extends Controller
             $track = SimulateDronePosition::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->limit(20)
-                ->get(['lat', 'lng'])
+                ->get(['latitude', 'longitude'])
                 ->reverse()
                 ->values(); // чтобы индекс был 0,1,2...
 
@@ -33,8 +33,8 @@ class SimulateDroneController extends Controller
                 $result[] = [
                     'id' => $drone->id,
                     'name' => $drone->name,
-                    'lat' => $last->lat,
-                    'lng' => $last->lng,
+                    'latitude' => $last->latitude,
+                    'longitude' => $last->longitude,
                     'track' => $track,
                 ];
             }
@@ -50,21 +50,21 @@ class SimulateDroneController extends Controller
     {
         $data = $request->validate([
             'drone_id' => 'required|exists:drones,id',
-            'lat' => 'required|numeric',
-            'lng' => 'required|numeric',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
         ]);
 
         // Обновить координаты дрона (опционально)
         Drone::where('id', $data['drone_id'])->update([
-            'lat' => $data['lat'],
-            'lng' => $data['lng'],
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
         ]);
 
         // Сохранить новую позицию в simulate_drone_positions
         SimulateDronePosition::create([
             'drone_id' => $data['drone_id'],
-            'lat' => $data['lat'],
-            'lng' => $data['lng'],
+            'latitude' => $data['latitude'],
+            'longitude' => $data['longitude'],
             'recorded_at' => now(),
         ]);
 
@@ -77,7 +77,7 @@ class SimulateDroneController extends Controller
     public function getLatest(Request $request): JsonResponse
     {
         $id = $request->input('id');
-        $drone = Drone::select('id', 'lat', 'lng')->find($id);
+        $drone = Drone::select('id', 'lat', 'longitude')->find($id);
 
         if (!$drone) {
             return response()->json(['message' => 'Drone not found'], 404);

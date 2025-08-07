@@ -26,8 +26,8 @@ class AdminDronePositionController extends Controller
     {
         $validated = $request->validate([
             'drone_id' => 'required|exists:drones,id',
-            'lat' => 'required|numeric|between:-90,90',
-            'lng' => 'required|numeric|between:-180,180',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
         ]);
 
         DronePosition::create($validated);
@@ -45,8 +45,8 @@ class AdminDronePositionController extends Controller
     {
         $validated = $request->validate([
             'drone_id' => 'required|exists:drones,id',
-            'lat' => 'required|numeric|between:-90,90',
-            'lng' => 'required|numeric|between:-180,180',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
         ]);
 
         $position->update($validated);

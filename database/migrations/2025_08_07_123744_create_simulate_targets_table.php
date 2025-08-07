@@ -11,18 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('flight_data', function (Blueprint $table) {
+        Schema::create('simulate_targets', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('drone_id');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->float('altitude')->nullable();    // высота
-            $table->float('speed')->nullable();       // скорость
-            $table->float('heading')->nullable();     // курс (0–360°)
-            $table->timestamp('recorded_at')->useCurrent(); // время записи в БД
+            $table->timestamp('assigned_at')->useCurrent();
             $table->timestamps();
 
-            // Внешний ключ (если есть таблица drones)
             $table->foreign('drone_id')->references('id')->on('drones')->onDelete('cascade');
         });
     }
@@ -32,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('flight_data');
+        Schema::dropIfExists('simulate_targets');
     }
 };

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin\Simulate;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\SimulateDronePosition;
+use App\Models\Simulate\SimulateDronePosition;
 use App\Models\Drone;
 
 class AdminSimulatePositionController extends Controller

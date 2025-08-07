@@ -1,24 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Simulate;
 
-use App\Models\Drone;
-use App\Models\Target;
-// use App\Models\Telemetry;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Http\Controllers\Controller;
+use App\Models\Simulate\SimulateDronePosition;
+use App\Models\Simulate\SimulateTarget;
+use App\Models\Drone;
 
-class ApiFlightDataController extends Controller
+class SimulateFlightDataController extends Controller
 {
-    // Получить трек дрона
     public function track($id)
     {
-        $telemetries = Telemetry::where('drone_id', $id)
+        $positions = SimulateDronePosition::where('drone_id', $id)
             ->orderBy('created_at')
             ->get(['latitude', 'longitude', 'altitude', 'speed', 'heading', 'created_at']);
 
-        return response()->json($telemetries);
+        return response()->json($positions);
     }
 
     // Сохранить координаты (создать новую запись)
@@ -32,7 +31,7 @@ class ApiFlightDataController extends Controller
             'heading'   => 'nullable|numeric',
         ]);
 
-        $telemetry = new Telemetry([
+        $position = new SimulateDronePosition([
             'drone_id'  => $id,
             'latitude'  => $validated['latitude'],
             'longitude' => $validated['longitude'],
@@ -41,15 +40,15 @@ class ApiFlightDataController extends Controller
             'heading'   => $validated['heading'] ?? null,
         ]);
 
-        $telemetry->save();
+        $position->save();
 
-        return response()->json(['status' => 'ok', 'id' => $telemetry->id]);
+        return response()->json(['status' => 'ok', 'id' => $position->id]);
     }
 
     // Обновить существующую запись телеметрии
     public function update(Request $request, $id)
     {
-        $telemetry = Telemetry::findOrFail($id);
+        $position = SimulateDronePosition::findOrFail($id);
 
         $validated = $request->validate([
             'latitude'  => 'required|numeric',
@@ -59,32 +58,28 @@ class ApiFlightDataController extends Controller
             'heading'   => 'nullable|numeric',
         ]);
 
-        $telemetry->update($validated);
+        $position->update($validated);
 
-        return response()->json(['status' => 'updated', 'id' => $telemetry->id]);
+        return response()->json(['status' => 'updated', 'id' => $position->id]);
     }
 
-    // Удалить запись телеметрии
     public function destroy($id)
     {
-        $telemetry = Telemetry::findOrFail($id);
-        $telemetry->delete();
+        $position = SimulateDronePosition::findOrFail($id);
+        $position->delete();
 
         return response()->json(['status' => 'deleted']);
     }
 
     // Получить координаты всех активных дронов с треками
-
-
     public function coordinates(): JsonResponse
     {
-        $activeDrones = Drone::where('status', 'active')->get();
+        $drones = Drone::all();
 
         $result = [];
 
-        foreach ($activeDrones as $drone) {
-            // Берём трек (20 последних точек)
-            $track = Telemetry::where('drone_id', $drone->id)
+        foreach ($drones as $drone) {
+            $track = SimulateDronePosition::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->limit(20)
                 ->get(['latitude as lat', 'longitude as lng'])
@@ -92,12 +87,12 @@ class ApiFlightDataController extends Controller
                 ->values();
 
             // Берём последнюю точку (актуальную)
-            $last = Telemetry::where('drone_id', $drone->id)
+            $last = SimulateDronePosition::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->first(['latitude as lat', 'longitude as lng', 'altitude', 'speed', 'heading', 'created_at']);
 
             // Берём цель (если есть)
-            $target = Target::where('drone_id', $drone->id)->first(['lat', 'lng']);
+            $target = SimulateTarget::where('drone_id', $drone->id)->first(['latitude as lat', 'longitude as lng']);
 
             if ($last) {
                 $result[] = [
@@ -110,7 +105,7 @@ class ApiFlightDataController extends Controller
                     'heading'    => $last->heading,
                     'updated_at' => $last->created_at->toDateTimeString(),
                     'track'      => $track,
-                    'target'     => $target, // null если нет цели
+                    'target'     => $target,
                 ];
             }
         }

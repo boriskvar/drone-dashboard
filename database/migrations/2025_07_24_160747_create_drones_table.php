@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('status', ['active', 'offline', 'idle', 'in_mission', 'maintenance'])->default('offline');
-            $table->decimal('lat', 10, 6);
-            $table->decimal('lng', 10, 6);
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
             $table->string('model')->nullable(); // Модель дрона
             $table->string('serial_number')->nullable(); // Не Уникальный пока серийный номер
             $table->string('manufacturer')->nullable(); // Производитель дрона

@@ -8,8 +8,8 @@ class Drone extends Model
 {
     protected $fillable = [
         'name',
-        'lat',
-        'lng',
+        'latitude',
+        'longitude',
         'status',
         'serial_number',
         'model',
