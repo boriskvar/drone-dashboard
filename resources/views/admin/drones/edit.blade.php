@@ -31,17 +31,17 @@
         </div>
 
         <div class="mb-3">
-            <label for="lat" class="form-label">Широта</label>
-            <input type="text" name="lat" class="form-control @error('lat') is-invalid @enderror"
-                value="{{ old('lat', $drone->lat) }}">
-            @error('lat') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            <label for="latitude" class="form-label">Широта</label>
+            <input type="text" name="latitude" class="form-control @error('latitude') is-invalid @enderror"
+                value="{{ old('latitude', $drone->latitude) }}">
+            @error('latitude') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
         <div class="mb-3">
-            <label for="lng" class="form-label">Долгота</label>
-            <input type="text" name="lng" class="form-control @error('lng') is-invalid @enderror"
-                value="{{ old('lng', $drone->lng) }}">
-            @error('lng') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            <label for="longitude" class="form-label">Долгота</label>
+            <input type="text" name="longitude" class="form-control @error('longitude') is-invalid @enderror"
+                value="{{ old('longitude', $drone->longitude) }}">
+            @error('longitude') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
         <div class="mb-3">
