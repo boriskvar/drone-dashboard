@@ -2,57 +2,54 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDroneController;
-use App\Http\Controllers\Admin\AdminDronePositionController;
-// use App\Http\Controllers\Admin\AdminTelemetryController;
-use App\Http\Controllers\Admin\Simulate\AdminSimulatePositionController;
-use App\Http\Controllers\Admin\AdminTargetController;
-
-// Группируем всё под общим префиксом `admin` + middleware
+use App\Http\Controllers\Admin\Simulate\AdminSimulateTrackController;
+use App\Http\Controllers\Admin\Simulate\AdminSimulateTargetController;
+use App\Http\Controllers\Admin\Simulate\AdminSimulateFlightDataController;
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
 
-        Route::prefix('simulate-positions')->group(function () {
-            Route::get('/', [AdminSimulatePositionController::class, 'index'])->name('admin.simulate_positions.index');
-            Route::get('/create', [AdminSimulatePositionController::class, 'create'])->name('admin.simulate_positions.create');
-            Route::post('/store', [AdminSimulatePositionController::class, 'store'])->name('admin.simulate_positions.store');
-            Route::get('{id}/edit', [AdminSimulatePositionController::class, 'edit'])->name('admin.simulate_positions.edit');
-            Route::put('{id}', [AdminSimulatePositionController::class, 'update'])->name('admin.simulate_positions.update');
-            Route::delete('{id}', [AdminSimulatePositionController::class, 'destroy'])->name('admin.simulate_positions.destroy');
-        });
-
-
-
-        Route::prefix('targets')->group(function () {
-            Route::get('/', [AdminTargetController::class, 'index'])->name('admin.targets.index');
-            Route::get('/targets/create', [AdminTargetController::class, 'create'])->name('admin.targets.create');
-            Route::post('/targets', [AdminTargetController::class, 'store'])->name('admin.targets.store');
-            Route::get('/{id}/edit', [AdminTargetController::class, 'edit'])->name('admin.targets.edit');
-            Route::put('/{id}', [AdminTargetController::class, 'update'])->name('admin.targets.update');
-            Route::delete('/{id}', [AdminTargetController::class, 'destroy'])->name('admin.targets.destroy');
-        });
-
-        // --- Drones ---
+        // 📦 CRUD для дронов
         Route::prefix('drones')->group(function () {
             Route::get('/', [AdminDroneController::class, 'index'])->name('admin.drones.index');
             Route::get('/create', [AdminDroneController::class, 'create'])->name('admin.drones.create');
-            Route::post('/', [AdminDroneController::class, 'store'])->name('admin.drones.store');
-            Route::get('/{drone}/edit', [AdminDroneController::class, 'edit'])->name('admin.drones.edit');
-            Route::put('/{drone}', [AdminDroneController::class, 'update'])->name('admin.drones.update');
-            Route::delete('/{drone}', [AdminDroneController::class, 'destroy'])->name('admin.drones.destroy');
+            Route::post('/store', [AdminDroneController::class, 'store'])->name('admin.drones.store');
+            Route::get('{drone}/edit', [AdminDroneController::class, 'edit'])->name('admin.drones.edit');
+            Route::put('{drone}', [AdminDroneController::class, 'update'])->name('admin.drones.update');
+            Route::delete('{drone}', [AdminDroneController::class, 'destroy'])->name('admin.drones.destroy');
 
-            // Кнопка "Сдвинуть дрона"
-            Route::post('/{drone}/move', [AdminDroneController::class, 'move'])->name('admin.drones.move');
+            Route::post('{drone}/move', [AdminDroneController::class, 'move'])->name('admin.drones.move');
         });
 
-        // --- Drone Positions ---
-        Route::prefix('positions')->group(function () {
-            Route::get('/', [AdminDronePositionController::class, 'index'])->name('admin.positions.index');
-            Route::get('/create', [AdminDronePositionController::class, 'create'])->name('admin.positions.create');
-            Route::post('/', [AdminDronePositionController::class, 'store'])->name('admin.positions.store');
-            Route::get('/{position}/edit', [AdminDronePositionController::class, 'edit'])->name('admin.positions.edit');
-            Route::put('/{position}', [AdminDronePositionController::class, 'update'])->name('admin.positions.update');
-            Route::delete('/{position}', [AdminDronePositionController::class, 'destroy'])->name('admin.positions.destroy');
+
+        // 🛰️ CRUD для симуляционных полётных данных
+        Route::prefix('simulate-flight-data')->group(function () {
+            Route::get('/', [AdminSimulateFlightDataController::class, 'index'])->name('admin.simulate_flight_data.index');
+            Route::get('/create', [AdminSimulateFlightDataController::class, 'create'])->name('admin.simulate_flight_data.create');
+            Route::post('/store', [AdminSimulateFlightDataController::class, 'store'])->name('admin.simulate_flight_data.store');
+            Route::get('{id}/edit', [AdminSimulateFlightDataController::class, 'edit'])->name('admin.simulate_flight_data.edit');
+            Route::put('{id}', [AdminSimulateFlightDataController::class, 'update'])->name('admin.simulate_flight_data.update');
+            Route::delete('{id}', [AdminSimulateFlightDataController::class, 'destroy'])->name('admin.simulate_flight_data.destroy');
+        });
+
+        // 🎯 CRUD для симуляционных целей
+        Route::prefix('simulate-targets')->group(function () {
+            Route::get('/', [AdminSimulateTargetController::class, 'index'])->name('admin.simulate_targets.index');
+            Route::get('/create', [AdminSimulateTargetController::class, 'create'])->name('admin.simulate_targets.create');
+            Route::post('/store', [AdminSimulateTargetController::class, 'store'])->name('admin.simulate_targets.store');
+            Route::get('{id}/edit', [AdminSimulateTargetController::class, 'edit'])->name('admin.simulate_targets.edit');
+            Route::put('{id}', [AdminSimulateTargetController::class, 'update'])->name('admin.simulate_targets.update');
+            Route::delete('{id}', [AdminSimulateTargetController::class, 'destroy'])->name('admin.simulate_targets.destroy');
+        });
+
+        // ✈️ CRUD для симуляционных треков
+        Route::prefix('simulate-tracks')->group(function () {
+            Route::get('/', [AdminSimulateTrackController::class, 'index'])->name('admin.simulate_tracks.index');
+            Route::get('/create', [AdminSimulateTrackController::class, 'create'])->name('admin.simulate_tracks.create');
+            Route::post('/store', [AdminSimulateTrackController::class, 'store'])->name('admin.simulate_tracks.store');
+            Route::get('{id}/edit', [AdminSimulateTrackController::class, 'edit'])->name('admin.simulate_tracks.edit');
+            Route::put('{id}', [AdminSimulateTrackController::class, 'update'])->name('admin.simulate_tracks.update');
+            Route::delete('{id}', [AdminSimulateTrackController::class, 'destroy'])->name('admin.simulate_tracks.destroy');
         });
     });

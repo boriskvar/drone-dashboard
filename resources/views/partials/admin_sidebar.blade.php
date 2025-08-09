@@ -7,21 +7,19 @@
         ['title' => 'Дроны', 'url' => route('admin.drones.index'), 'route' => 'admin.drones.index'],
         ['title' => 'Добавить дрон', 'url' => route('admin.drones.create'), 'route' => 'admin.drones.create'],
 
-        ['title' => 'Позиции дронов', 'url' => route('admin.positions.index'), 'route' => 'admin.positions.index'],
-        ['title' => 'Добавить позицию', 'url' => route('admin.positions.create'), 'route' => 'admin.positions.create'],
-
-
+        // ['title' => 'Позиции дронов', 'url' => route('admin.positions.index'), 'route' => 'admin.positions.index'],
+        // ['title' => 'Добавить позицию', 'url' => route('admin.positions.create'), 'route' =>
+        //'admin.positions.create'],
 
         // Новый раздел — симуляция
-        ['title' => 'Симуляция', 'url' => route('admin.simulate_positions.index'), 'route' =>
-        'admin.simulate_positions.index'],
-        ['title' => 'Добавить симуляцию', 'url' => route('admin.simulate_positions.create'), 'route' =>
-        'admin.simulate_positions.create'],
-
+        // ['title' => 'Симуляция', 'url' => route('admin.simulate_positions.index'), 'route' =>
+        //'admin.simulate_positions.index'],
+        // ['title' => 'Добавить симуляцию', 'url' => route('admin.simulate_positions.create'), 'route' =>
+        //'admin.simulate_positions.create'],
 
         // Новый раздел — цели
-        ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],
-        ['title' => 'Назначить цель', 'url' => route('admin.targets.create'), 'route' => 'admin.targets.create'],
+        // ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],
+        // ['title' => 'Назначить цель', 'url' => route('admin.targets.create'), 'route' => 'admin.targets.create'],
         ];
         @endphp
 

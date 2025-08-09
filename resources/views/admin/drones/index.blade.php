@@ -2,51 +2,67 @@
 
 @section('title', 'Список дронов')
 
-@section('header', 'Дроны')
-
 @section('content')
-<h1>Список дронов</h1>
+<div class="container mt-4">
+    <h1 class="mb-4">Список дронов</h1>
 
-<a href="{{ url('/admin/drones/create') }}" class="btn btn-success mb-3">Добавить дрон</a>
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
 
-<table class="table table-bordered">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Название</th>
-            <th>Статус</th>
-            <th>Широта</th>
-            <th>Долгота</th>
-            <th>Действия</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($drones as $drone)
-        <tr>
-            <td>{{ $drone->id }}</td>
-            <td>{{ $drone->name }}</td>
-            <td>{{ $drone->status }}</td>
-            <td>{{ $drone->lat }}</td>
-            <td>{{ $drone->lng }}</td>
-            <td>
-                <a href="{{ url("/admin/drones/{$drone->id}/edit") }}" class="btn btn-sm btn-primary">Редактировать</a>
+    <a href="{{ route('admin.drones.create') }}" class="btn btn-primary mb-3">
+        + Добавить дрон
+    </a>
 
-                <form action="{{ url("/admin/drones/{$drone->id}") }}" method="POST" style="display:inline-block;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger"
-                        onclick="return confirm('Удалить?')">Удалить</button>
-                </form>
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Имя</th>
+                <th>Статус</th>
+                <th>Широта</th>
+                <th>Долгота</th>
+                <!-- <th>Модель</th> -->
+                <!-- <th>Серийный номер</th> -->
+                <!-- <th>Производитель</th> -->
+                <!-- <th>Дата производства</th> -->
+                <!-- <th>Версия прошивки</th> -->
+                <!-- <th>Создан</th> -->
+                <th>Обновлен</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach($drones as $drone)
+            <tr>
+                <td>{{ $drone->id }}</td>
+                <td>{{ $drone->name }}</td>
+                <td>{{ $drone->status }}</td>
+                <td>{{ $drone->latitude }}</td>
+                <td>{{ $drone->longitude }}</td>
+                <!-- <td>{{ $drone->model ?? '-' }}</td> -->
+                <!-- <td>{{ $drone->serial_number ?? '-' }}</td> -->
+                <!-- <td>{{ $drone->manufacturer ?? '-' }}</td> -->
+                <!-- <td>{{ $drone->manufacture_date ? $drone->manufacture_date->format('Y-m-d') : '-' }}</td> -->
+                <!-- <td>{{ $drone->firmware_version ?? '-' }}</td> -->
+                <!-- <td>{{ $drone->created_at->format('Y-m-d H:i') }}</td> -->
+                <td>{{ $drone->updated_at->format('Y-m-d H:i') }}</td>
+                <td class="d-flex gap-1">
+                    <a href="{{ route('admin.drones.edit', $drone) }}" class="btn btn-sm btn-primary"
+                       title="Редактировать">✏️</a>
 
+                    <form action="{{ route('admin.drones.destroy', $drone) }}" method="POST"
+                          onsubmit="return confirm('Удалить дрон?')">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-sm btn-danger" title="Удалить">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
 
-                <!-- Кнопка "Сдвинуть" -->
-                <form action="{{ url('/admin/drones/' . $drone->id . '/move') }}" method="POST" style="display:inline;">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-warning">Сдвинуть</button>
-                </form>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+    {{ $drones->links() }}
+</div>
 @endsection

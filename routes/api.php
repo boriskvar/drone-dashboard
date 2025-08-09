@@ -25,7 +25,7 @@ use App\Http\Controllers\Api\Simulate\SimulateDroneController;
 use App\Http\Controllers\Api\Simulate\SimulateFlightDataController;
 use App\Http\Controllers\Api\Simulate\SimulateTargetController;
 
-Route::prefix('simulated')->group(function () {
+Route::prefix('simulate')->group(function () {
     // 📌 Получить актуальные координаты всех дронов (симуляция)
     Route::get('/coordinates', [SimulateFlightDataController::class, 'coordinates']);
 
