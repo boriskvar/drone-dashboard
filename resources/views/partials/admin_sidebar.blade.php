@@ -26,9 +26,12 @@
 
 
         // Новый раздел — цели
-        // ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],
-        // ['title' => 'Назначить цель', 'url' => route('admin.targets.create'), 'route' => 'admin.targets.create'],
+        ['title' => 'Симуляция Цели', 'url' => route('admin.simulate_targets.index'), 'route' =>
+        'admin.simulate_targets.index'],
+        ['title' => 'Добавить цель', 'url' => route('admin.simulate_targets.create'), 'route' =>
+        'admin.simulate_targets.create'],
         ];
+
         @endphp
 
         @foreach($adminMenuItems as $item)

@@ -6,12 +6,12 @@
 <div class="container mt-4">
     <h1 class="mb-4">✏️ Редактировать координаты трека дрона #{{ $simulateTrack->id }}</h1>
 
-    @if ($errors->any())
+    @if($errors->any())
     <div class="alert alert-danger">
-        <strong>Ошибка:</strong> Проверьте заполнение полей.
+        <strong>Ошибка!</strong> Проверьте введённые данные.
         <ul class="mb-0">
-            @foreach ($errors->all() as $err)
-            <li>{{ $err }}</li>
+            @foreach($errors->all() as $error)
+            <li>{{ $error }}</li>
             @endforeach
         </ul>
     </div>
