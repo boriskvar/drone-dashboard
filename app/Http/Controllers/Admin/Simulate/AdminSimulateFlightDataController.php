@@ -46,9 +46,9 @@ class AdminSimulateFlightDataController extends Controller
             ->with('success', 'Данные полёта добавлены.');
     }
 
-    public function edit($id)
+    public function edit(SimulateFlightData $simulateFlightData)
     {
-        $flight = SimulateFlightData::findOrFail($id);
+        $flight = $simulateFlightData; // $simulateFlightData — это уже модель из БД
         $drones = Drone::all();
 
         return view('admin.simulate_flight_data.edit', [
@@ -58,7 +58,7 @@ class AdminSimulateFlightDataController extends Controller
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, SimulateFlightData $simulateFlightData)
     {
         $validated = $request->validate([
             'drone_id'  => 'required|exists:drones,id',
@@ -69,16 +69,18 @@ class AdminSimulateFlightDataController extends Controller
             'heading'   => 'nullable|numeric',
         ]);
 
-        $flight = SimulateFlightData::findOrFail($id);
+        // $simulateFlightData — это уже модель из БД
+        $flight = $simulateFlightData; // Assuming $simulateFlightData is the model instance
         $flight->update($validated);
 
         return redirect()->route('admin.simulate_flight_data.index')
             ->with('success', 'Данные полёта обновлены.');
     }
 
-    public function destroy($id)
+    public function destroy(SimulateFlightData $simulateFlightData)
     {
-        $flight = SimulateFlightData::findOrFail($id);
+        // $simulateFlightData — это уже модель из БД
+        $flight = $simulateFlightData; // Assuming $simulateFlightData is the model instance
         $flight->delete();
 
         return redirect()->route('admin.simulate_flight_data.index')

@@ -28,19 +28,9 @@ Route::middleware(['auth', 'admin'])
             Route::get('/', [AdminSimulateFlightDataController::class, 'index'])->name('admin.simulate_flight_data.index');
             Route::get('/create', [AdminSimulateFlightDataController::class, 'create'])->name('admin.simulate_flight_data.create');
             Route::post('/store', [AdminSimulateFlightDataController::class, 'store'])->name('admin.simulate_flight_data.store');
-            Route::get('{id}/edit', [AdminSimulateFlightDataController::class, 'edit'])->name('admin.simulate_flight_data.edit');
-            Route::put('{id}', [AdminSimulateFlightDataController::class, 'update'])->name('admin.simulate_flight_data.update');
-            Route::delete('{id}', [AdminSimulateFlightDataController::class, 'destroy'])->name('admin.simulate_flight_data.destroy');
-        });
-
-        // 🎯 CRUD для симуляционных целей
-        Route::prefix('simulate-targets')->group(function () {
-            Route::get('/', [AdminSimulateTargetController::class, 'index'])->name('admin.simulate_targets.index');
-            Route::get('/create', [AdminSimulateTargetController::class, 'create'])->name('admin.simulate_targets.create');
-            Route::post('/store', [AdminSimulateTargetController::class, 'store'])->name('admin.simulate_targets.store');
-            Route::get('{id}/edit', [AdminSimulateTargetController::class, 'edit'])->name('admin.simulate_targets.edit');
-            Route::put('{id}', [AdminSimulateTargetController::class, 'update'])->name('admin.simulate_targets.update');
-            Route::delete('{id}', [AdminSimulateTargetController::class, 'destroy'])->name('admin.simulate_targets.destroy');
+            Route::get('{simulateFlightData}/edit', [AdminSimulateFlightDataController::class, 'edit'])->name('admin.simulate_flight_data.edit');
+            Route::put('{simulateFlightData}', [AdminSimulateFlightDataController::class, 'update'])->name('admin.simulate_flight_data.update');
+            Route::delete('{simulateFlightData}', [AdminSimulateFlightDataController::class, 'destroy'])->name('admin.simulate_flight_data.destroy');
         });
 
         // ✈️ CRUD для симуляционных треков
@@ -48,8 +38,18 @@ Route::middleware(['auth', 'admin'])
             Route::get('/', [AdminSimulateTrackController::class, 'index'])->name('admin.simulate_tracks.index');
             Route::get('/create', [AdminSimulateTrackController::class, 'create'])->name('admin.simulate_tracks.create');
             Route::post('/store', [AdminSimulateTrackController::class, 'store'])->name('admin.simulate_tracks.store');
-            Route::get('{id}/edit', [AdminSimulateTrackController::class, 'edit'])->name('admin.simulate_tracks.edit');
-            Route::put('{id}', [AdminSimulateTrackController::class, 'update'])->name('admin.simulate_tracks.update');
-            Route::delete('{id}', [AdminSimulateTrackController::class, 'destroy'])->name('admin.simulate_tracks.destroy');
+            Route::get('{simulateTrack}/edit', [AdminSimulateTrackController::class, 'edit'])->name('admin.simulate_tracks.edit');
+            Route::put('{simulateTrack}', [AdminSimulateTrackController::class, 'update'])->name('admin.simulate_tracks.update');
+            Route::delete('{simulateTrack}', [AdminSimulateTrackController::class, 'destroy'])->name('admin.simulate_tracks.destroy');
+        });
+
+        // 🎯 CRUD для симуляционных целей
+        Route::prefix('simulate-targets')->group(function () {
+            Route::get('/', [AdminSimulateTargetController::class, 'index'])->name('admin.simulate_targets.index');
+            Route::get('/create', [AdminSimulateTargetController::class, 'create'])->name('admin.simulate_targets.create');
+            Route::post('/store', [AdminSimulateTargetController::class, 'store'])->name('admin.simulate_targets.store');
+            Route::get('{simulateTarget}/edit', [AdminSimulateTargetController::class, 'edit'])->name('admin.simulate_targets.edit');
+            Route::put('{simulateTarget}', [AdminSimulateTargetController::class, 'update'])->name('admin.simulate_targets.update');
+            Route::delete('{simulateTarget}', [AdminSimulateTargetController::class, 'destroy'])->name('admin.simulate_targets.destroy');
         });
     });

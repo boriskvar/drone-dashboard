@@ -12,7 +12,7 @@ class SimulateTrack extends Model
     use HasFactory;
 
     // Имя таблицы (не обязательно, если Laravel сам определит верно)
-    protected $table = 'simulate_drone_positions';
+    protected $table = 'simulate_tracks';
 
     // Разрешённые поля для массового заполнения
     protected $fillable = [
@@ -22,12 +22,12 @@ class SimulateTrack extends Model
         'altitude',
         'speed',
         'heading',
-        'recorded_at',
     ];
 
     // Автоматическое преобразование даты
     protected $casts = [
-        'recorded_at' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     // Если нужна связь с моделью Drone (опционально)

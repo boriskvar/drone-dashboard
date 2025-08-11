@@ -1,24 +1,31 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Admin\Simulate;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Simulate\SimulateTrack;
 use App\Models\Drone;
-use App\Models\DronePosition;
 
-class AdminDronePositionController extends Controller
+class AdminSimulateTrackController extends Controller
 {
     public function index()
     {
-        $positions = DronePosition::with('drone')->latest()->paginate(20);
-        return view('admin.positions.index', compact('positions'));
+        $tracks = SimulateTrack::with('drone')->latest()->paginate(20);
+
+        return view('admin.simulate_tracks.index', [
+            'simulateTracks' => $tracks,
+            'activeRoute' => 'admin.simulate_tracks.index',
+        ]);
     }
 
     public function create()
     {
-        return view('admin.positions.create', [
-            'drones' => Drone::all(),
+        $drones = Drone::all();
+
+        return view('admin.simulate_tracks.create', [
+            'drones' => $drones,
+            'activeRoute' => 'admin.simulate_tracks.create',
         ]);
     }
 
@@ -28,35 +35,50 @@ class AdminDronePositionController extends Controller
             'drone_id' => 'required|exists:drones,id',
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
+            'altitude' => 'nullable|numeric',
+            'speed' => 'nullable|numeric',
+            'heading' => 'nullable|numeric',
         ]);
 
-        DronePosition::create($validated);
+        SimulateTrack::create($validated);
 
-        return redirect()->route('admin.positions.index')->with('success', 'Позиция добавлена');
+        return redirect()->route('admin.simulate_tracks.index')
+            ->with('success', 'Трек добавлен.');
     }
 
-    public function edit(DronePosition $position)
+    public function edit(SimulateTrack $simulateTrack)
     {
         $drones = Drone::all();
-        return view('admin.positions.edit', compact('position', 'drones'));
+
+        return view('admin.simulate_tracks.edit', [
+            'simulateTrack' => $simulateTrack,
+            'drones' => $drones,
+            'activeRoute' => 'admin.simulate_tracks.index',
+        ]);
     }
 
-    public function update(Request $request, DronePosition $position)
+    public function update(Request $request, SimulateTrack $simulateTrack)
     {
         $validated = $request->validate([
             'drone_id' => 'required|exists:drones,id',
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
+            'altitude' => 'nullable|numeric',
+            'speed' => 'nullable|numeric',
+            'heading' => 'nullable|numeric',
         ]);
 
-        $position->update($validated);
+        $simulateTrack->update($validated);
 
-        return redirect()->route('admin.positions.index')->with('success', 'Позиция обновлена');
+        return redirect()->route('admin.simulate_tracks.index')
+            ->with('success', 'Трек обновлен.');
     }
 
-    public function destroy(DronePosition $position)
+    public function destroy(SimulateTrack $simulateTrack)
     {
-        $position->delete();
-        return redirect()->route('admin.positions.index')->with('success', 'Позиция удалена');
+        $simulateTrack->delete();
+
+        return redirect()->route('admin.simulate_tracks.index')
+            ->with('success', 'Трек удален.');
     }
 }

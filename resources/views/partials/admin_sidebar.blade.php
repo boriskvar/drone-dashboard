@@ -18,6 +18,12 @@
         ['title' => 'Добавить данные полёта', 'url' => route('admin.simulate_flight_data.create'), 'route' =>
         'admin.simulate_flight_data.create'],
 
+        // Симуляция треков
+        ['title' => 'Симуляция треков', 'url' => route('admin.simulate_tracks.index'), 'route' =>
+        'admin.simulate_tracks.index'],
+        ['title' => 'Добавить трек', 'url' => route('admin.simulate_tracks.create'), 'route' =>
+        'admin.simulate_tracks.create'],
+
 
         // Новый раздел — цели
         // ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],
