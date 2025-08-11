@@ -12,10 +12,12 @@
         //'admin.positions.create'],
 
         // Новый раздел — симуляция
-        // ['title' => 'Симуляция', 'url' => route('admin.simulate_positions.index'), 'route' =>
-        //'admin.simulate_positions.index'],
-        // ['title' => 'Добавить симуляцию', 'url' => route('admin.simulate_positions.create'), 'route' =>
-        //'admin.simulate_positions.create'],
+        // Симуляция данных полета
+        ['title' => 'Симуляция данных полёта', 'url' => route('admin.simulate_flight_data.index'), 'route' =>
+        'admin.simulate_flight_data.index'],
+        ['title' => 'Добавить данные полёта', 'url' => route('admin.simulate_flight_data.create'), 'route' =>
+        'admin.simulate_flight_data.create'],
+
 
         // Новый раздел — цели
         // ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' => 'admin.targets.index'],

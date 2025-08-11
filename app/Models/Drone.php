@@ -53,10 +53,10 @@ class Drone extends Model
     /**
      * Реальные треки дрона
      */
-    public function tracks()
+    /* public function tracks()
     {
         return $this->hasMany(Track::class, 'drone_id');
-    }
+    } */
 
     /**
      * Симуляция — полётные данные
