@@ -11,78 +11,11 @@ use App\Models\Drone;
 
 class ApiSimulateFlightDataController extends Controller
 {
-    /**
-     * Получить трек дрона по drone_id
-     */
-    public function track(int $droneId): JsonResponse
-    {
-        $positions = SimulateFlightData::where('drone_id', $droneId)
-            ->orderBy('created_at')
-            ->get(['latitude', 'longitude', 'altitude', 'speed', 'heading', 'created_at']);
-
-        return response()->json($positions);
-    }
-
-    /**
-     * Сохранить координаты (создать новую позицию) по drone_id
-     */
-    public function store(Request $request, int $droneId): JsonResponse
-    {
-        $validated = $request->validate([
-            'latitude'  => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'altitude'  => 'nullable|numeric',
-            'speed'     => 'nullable|numeric',
-            'heading'   => 'nullable|numeric',
-        ]);
-
-        $position = SimulateFlightData::create([
-            'drone_id'  => $droneId,
-            'latitude'  => $validated['latitude'],
-            'longitude' => $validated['longitude'],
-            'altitude'  => $validated['altitude'] ?? null,
-            'speed'     => $validated['speed'] ?? null,
-            'heading'   => $validated['heading'] ?? null,
-        ]);
-
-        return response()->json(['status' => 'ok', 'id' => $position->id]);
-    }
-
-    /**
-     * Обновить позицию по id
-     */
-    public function update(Request $request, int $id): JsonResponse
-    {
-        $position = SimulateFlightData::findOrFail($id);
-
-        $validated = $request->validate([
-            'latitude'  => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'altitude'  => 'nullable|numeric',
-            'speed'     => 'nullable|numeric',
-            'heading'   => 'nullable|numeric',
-        ]);
-
-        $position->update($validated);
-
-        return response()->json(['status' => 'updated', 'id' => $position->id]);
-    }
-
-    /**
-     * Удалить позицию по id
-     */
-    public function destroy(int $id): JsonResponse
-    {
-        $position = SimulateFlightData::findOrFail($id);
-        $position->delete();
-
-        return response()->json(['status' => 'deleted']);
-    }
 
     /**
      * Получить координаты всех активных дронов с треками и целями
      */
-    public function coordinates(): JsonResponse
+    public function latestPositions(): JsonResponse
     {
         $drones = Drone::all();
 
