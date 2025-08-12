@@ -21,26 +21,21 @@ use Illuminate\Support\Facades\Route;
 // Route::post('/target', [ApiTargetController::class, 'store']);
 
 // === 🧪 СИМУЛИРОВАННЫЕ МАРШРУТЫ ===
-use App\Http\Controllers\Api\Simulate\SimulateDroneController;
-use App\Http\Controllers\Api\Simulate\SimulateFlightDataController;
-use App\Http\Controllers\Api\Simulate\SimulateTargetController;
+use App\Http\Controllers\Api\Simulate\ApiSimulateFlightDataController;
+use App\Http\Controllers\Api\Simulate\ApiSimulateTrackController;
+use App\Http\Controllers\Api\Simulate\ApiSimulateTargetController;
 
-Route::prefix('simulate')->group(function () {
-    // 📌 Получить актуальные координаты всех дронов (симуляция)
-    Route::get('/coordinates', [SimulateFlightDataController::class, 'coordinates']);
+Route::prefix('simulate-flight-data')->group(function () {
+    Route::get('/', [ApiSimulateFlightDataController::class, 'coordinates']);
+    Route::post('/drones/{simulateFlightData}/flight-data', [ApiSimulateFlightDataController::class, 'store']);
+});
 
-    // 📌 Получить трек дрона (симуляция)
-    Route::get('/drones/{id}/track', [SimulateFlightDataController::class, 'track']);
+Route::prefix('simulate-tracks')->group(function () {
+    Route::get('/drones', [ApiSimulateTrackController::class, 'index']);
+    Route::get('/drones/{simulateTrack}/track', [ApiSimulateTrackController::class, 'track']);
+    Route::get('/positions', [ApiSimulateTrackController::class, 'positions']);
+});
 
-    // 📌 Принять координаты от дрона (симуляция)
-    Route::post('/drones/{id}/flight_data', [SimulateFlightDataController::class, 'store']);
-
-    // 📌 Назначить цель (симуляция)
-    Route::post('/target', [SimulateTargetController::class, 'store']);
-
-    // 📌 (Необязательно) Тест: список всех позиций
-    Route::get('/positions', [SimulateDroneController::class, 'index']);
-
-    // 📌 (Необязательно) Тест: список дронов
-    Route::post('/drones', [SimulateDroneController::class, 'list']);
+Route::prefix('simulate-targets')->group(function () {
+    Route::post('/', [ApiSimulateTargetController::class, 'store']);
 });

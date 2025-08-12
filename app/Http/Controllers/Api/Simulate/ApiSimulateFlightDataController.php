@@ -5,23 +5,28 @@ namespace App\Http\Controllers\Api\Simulate;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Models\Simulate\SimulateDronePosition;
+use App\Models\Simulate\SimulateFlightData;
 use App\Models\Simulate\SimulateTarget;
 use App\Models\Drone;
 
-class SimulateFlightDataController extends Controller
+class ApiSimulateFlightDataController extends Controller
 {
-    public function track($id)
+    /**
+     * Получить трек дрона по drone_id
+     */
+    public function track(int $droneId): JsonResponse
     {
-        $positions = SimulateDronePosition::where('drone_id', $id)
+        $positions = SimulateFlightData::where('drone_id', $droneId)
             ->orderBy('created_at')
             ->get(['latitude', 'longitude', 'altitude', 'speed', 'heading', 'created_at']);
 
         return response()->json($positions);
     }
 
-    // Сохранить координаты (создать новую запись)
-    public function store(Request $request, $id)
+    /**
+     * Сохранить координаты (создать новую позицию) по drone_id
+     */
+    public function store(Request $request, int $droneId): JsonResponse
     {
         $validated = $request->validate([
             'latitude'  => 'required|numeric',
@@ -31,8 +36,8 @@ class SimulateFlightDataController extends Controller
             'heading'   => 'nullable|numeric',
         ]);
 
-        $position = new SimulateDronePosition([
-            'drone_id'  => $id,
+        $position = SimulateFlightData::create([
+            'drone_id'  => $droneId,
             'latitude'  => $validated['latitude'],
             'longitude' => $validated['longitude'],
             'altitude'  => $validated['altitude'] ?? null,
@@ -40,15 +45,15 @@ class SimulateFlightDataController extends Controller
             'heading'   => $validated['heading'] ?? null,
         ]);
 
-        $position->save();
-
         return response()->json(['status' => 'ok', 'id' => $position->id]);
     }
 
-    // Обновить существующую запись телеметрии
-    public function update(Request $request, $id)
+    /**
+     * Обновить позицию по id
+     */
+    public function update(Request $request, int $id): JsonResponse
     {
-        $position = SimulateDronePosition::findOrFail($id);
+        $position = SimulateFlightData::findOrFail($id);
 
         $validated = $request->validate([
             'latitude'  => 'required|numeric',
@@ -63,15 +68,20 @@ class SimulateFlightDataController extends Controller
         return response()->json(['status' => 'updated', 'id' => $position->id]);
     }
 
-    public function destroy($id)
+    /**
+     * Удалить позицию по id
+     */
+    public function destroy(int $id): JsonResponse
     {
-        $position = SimulateDronePosition::findOrFail($id);
+        $position = SimulateFlightData::findOrFail($id);
         $position->delete();
 
         return response()->json(['status' => 'deleted']);
     }
 
-    // Получить координаты всех активных дронов с треками
+    /**
+     * Получить координаты всех активных дронов с треками и целями
+     */
     public function coordinates(): JsonResponse
     {
         $drones = Drone::all();
@@ -79,27 +89,25 @@ class SimulateFlightDataController extends Controller
         $result = [];
 
         foreach ($drones as $drone) {
-            $track = SimulateDronePosition::where('drone_id', $drone->id)
+            $track = SimulateFlightData::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->limit(20)
-                ->get(['latitude as lat', 'longitude as lng'])
+                ->get(['latitude', 'longitude'])
                 ->reverse()
                 ->values();
 
-            // Берём последнюю точку (актуальную)
-            $last = SimulateDronePosition::where('drone_id', $drone->id)
+            $last = SimulateFlightData::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
-                ->first(['latitude as lat', 'longitude as lng', 'altitude', 'speed', 'heading', 'created_at']);
+                ->first(['latitude', 'longitude', 'altitude', 'speed', 'heading', 'created_at']);
 
-            // Берём цель (если есть)
-            $target = SimulateTarget::where('drone_id', $drone->id)->first(['latitude as lat', 'longitude as lng']);
+            $target = SimulateTarget::where('drone_id', $drone->id)->first(['latitude', 'longitude']);
 
             if ($last) {
                 $result[] = [
                     'id'         => $drone->id,
                     'name'       => $drone->name,
-                    'lat'        => $last->lat,
-                    'lng'        => $last->lng,
+                    'latitude'   => $last->latitude,
+                    'longitude'  => $last->longitude,
                     'altitude'   => $last->altitude,
                     'speed'      => $last->speed,
                     'heading'    => $last->heading,

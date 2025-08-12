@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Simulate\SimulateTarget;
 
-class SimulateTargetController extends Controller
+class ApiSimulateTargetController extends Controller
 {
     // Назначить цель дрону (создать запись)
     public function store(Request $request)

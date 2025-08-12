@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Models\SimulateDronePosition;
 
-class SimulateDroneController extends Controller
+class ApiSimulateTrackController extends Controller
 {
     /**
      * Вернуть список активных дронов с последними координатами и треком.
