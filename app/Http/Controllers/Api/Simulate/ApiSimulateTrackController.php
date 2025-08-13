@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Api\Simulate;
 
 use App\Models\Drone;
-use Illuminate\Http\Request;
+use App\Models\Simulate\SimulateTrack;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Models\SimulateDronePosition;
 
 class ApiSimulateTrackController extends Controller
 {
-    /**
-     * Вернуть список активных дронов с последними координатами и треком.
-     */
+    // Получить список активных дронов с последней точкой и треком (последние 20 точек)
     public function index(): JsonResponse
     {
         $activeDrones = Drone::where('status', 'active')->get();
@@ -20,21 +17,24 @@ class ApiSimulateTrackController extends Controller
         $result = [];
 
         foreach ($activeDrones as $drone) {
-            $track = SimulateDronePosition::where('drone_id', $drone->id)
+            $track = SimulateTrack::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->limit(20)
                 ->get(['latitude', 'longitude'])
                 ->reverse()
-                ->values(); // чтобы индекс был 0,1,2...
+                ->values();
 
-            $last = $track->last(); // Последняя точка — текущее положение
+            // Посмотрим трек дрона прямо здесь
+            dd($drone->id, $track);
 
-            if ($last) {
+            $lastPoint = $track->last(); // Последняя точка — текущее положение
+
+            if ($lastPoint) {
                 $result[] = [
                     'id' => $drone->id,
                     'name' => $drone->name,
-                    'latitude' => $last->latitude,
-                    'longitude' => $last->longitude,
+                    'latitude' => $lastPoint->latitude,
+                    'longitude' => $lastPoint->longitude,
                     'track' => $track,
                 ];
             }
@@ -43,46 +43,13 @@ class ApiSimulateTrackController extends Controller
         return response()->json($result);
     }
 
-    /**
-     * Сохранить имитированную позицию дрона.
-     */
-    public function store(Request $request): JsonResponse
+    // Получить полный трек по drone_id
+    public function track(int $droneId): JsonResponse
     {
-        $data = $request->validate([
-            'drone_id' => 'required|exists:drones,id',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
+        $positions = SimulateTrack::where('drone_id', $droneId)
+            ->orderBy('created_at')
+            ->get(['latitude', 'longitude', 'altitude', 'speed', 'heading', 'created_at']);
 
-        // Обновить координаты дрона (опционально)
-        Drone::where('id', $data['drone_id'])->update([
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-        ]);
-
-        // Сохранить новую позицию в simulate_drone_positions
-        SimulateDronePosition::create([
-            'drone_id' => $data['drone_id'],
-            'latitude' => $data['latitude'],
-            'longitude' => $data['longitude'],
-            'recorded_at' => now(),
-        ]);
-
-        return response()->json(['message' => 'Simulated position stored']);
-    }
-
-    /**
-     * Вернуть последние координаты одного дрона.
-     */
-    public function getLatest(Request $request): JsonResponse
-    {
-        $id = $request->input('id');
-        $drone = Drone::select('id', 'lat', 'longitude')->find($id);
-
-        if (!$drone) {
-            return response()->json(['message' => 'Drone not found'], 404);
-        }
-
-        return response()->json($drone);
+        return response()->json($positions);
     }
 }
