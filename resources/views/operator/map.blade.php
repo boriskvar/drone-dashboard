@@ -26,8 +26,8 @@
         const map = L.map('map').setView([50.4501, 30.5234], 13);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
+            maxZoom: 19
+            , attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         // Хранилища маркеров и треков
@@ -37,11 +37,11 @@
         // Создание иконки дрона
         function createDroneIcon() {
             return L.icon({
-                iconUrl: '/images/drone-arrow.svg',
-                iconSize: [30, 30],
-                iconAnchor: [15, 15],
-                popupAnchor: [0, -15],
-                className: 'leaflet-drone-icon'
+                iconUrl: '/images/drone-arrow.svg'
+                , iconSize: [30, 30]
+                , iconAnchor: [15, 15]
+                , popupAnchor: [0, -15]
+                , className: 'leaflet-drone-icon'
             });
         }
 
@@ -64,8 +64,8 @@
                     // Создаём или обновляем маркер
                     if (!markers[drone.id]) {
                         const marker = L.marker(latlng, {
-                            icon: createDroneIcon(),
-                            rotationAngle: drone.heading || 0, // поворот при создании
+                            icon: createDroneIcon()
+                            , rotationAngle: drone.heading || 0, // поворот при создании
                             rotationOrigin: 'center center'
                         }).addTo(map);
 
@@ -103,8 +103,8 @@
 
                     if (!polylines[drone.id]) {
                         polylines[drone.id] = L.polyline(trackLatLngs, {
-                            color: 'blue',
-                            weight: 3
+                            color: 'blue'
+                            , weight: 3
                         }).addTo(map);
                     } else {
                         polylines[drone.id].setLatLngs(trackLatLngs);

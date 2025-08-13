@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDroneController;
-use App\Http\Controllers\Admin\Simulate\AdminSimulateTrackController;
 use App\Http\Controllers\Admin\Simulate\AdminSimulateTargetController;
 use App\Http\Controllers\Admin\Simulate\AdminSimulateFlightDataController;
 
@@ -32,16 +31,6 @@ Route::middleware(['auth', 'admin'])
             Route::put('{simulateFlightData}', [AdminSimulateFlightDataController::class, 'update'])->name('admin.simulate_flight_data.update');
             Route::delete('{simulateFlightData}', [AdminSimulateFlightDataController::class, 'destroy'])->name('admin.simulate_flight_data.destroy');
         });
-
-        // ✈️ CRUD для симуляционных треков
-        /*  Route::prefix('simulate-tracks')->group(function () {
-            Route::get('/', [AdminSimulateTrackController::class, 'index'])->name('admin.simulate_tracks.index');
-            Route::get('/create', [AdminSimulateTrackController::class, 'create'])->name('admin.simulate_tracks.create');
-            Route::post('/store', [AdminSimulateTrackController::class, 'store'])->name('admin.simulate_tracks.store');
-            Route::get('{simulateTrack}/edit', [AdminSimulateTrackController::class, 'edit'])->name('admin.simulate_tracks.edit');
-            Route::put('{simulateTrack}', [AdminSimulateTrackController::class, 'update'])->name('admin.simulate_tracks.update');
-            Route::delete('{simulateTrack}', [AdminSimulateTrackController::class, 'destroy'])->name('admin.simulate_tracks.destroy');
-        }); */
 
         // 🎯 CRUD для симуляционных целей
         Route::prefix('simulate-targets')->group(function () {

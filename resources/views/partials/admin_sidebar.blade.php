@@ -7,25 +7,13 @@
         ['title' => 'Дроны', 'url' => route('admin.drones.index'), 'route' => 'admin.drones.index'],
         ['title' => 'Добавить дрон', 'url' => route('admin.drones.create'), 'route' => 'admin.drones.create'],
 
-        // ['title' => 'Позиции дронов', 'url' => route('admin.positions.index'), 'route' => 'admin.positions.index'],
-        // ['title' => 'Добавить позицию', 'url' => route('admin.positions.create'), 'route' =>
-        //'admin.positions.create'],
-
-        // Новый раздел — симуляция
         // Симуляция данных полета
         ['title' => 'Симуляция данных полёта', 'url' => route('admin.simulate_flight_data.index'), 'route' =>
         'admin.simulate_flight_data.index'],
         ['title' => 'Добавить данные полёта', 'url' => route('admin.simulate_flight_data.create'), 'route' =>
         'admin.simulate_flight_data.create'],
 
-        // Симуляция треков
-        /* ['title' => 'Симуляция треков', 'url' => route('admin.simulate_tracks.index'), 'route' =>
-        'admin.simulate_tracks.index'],
-        ['title' => 'Добавить трек', 'url' => route('admin.simulate_tracks.create'), 'route' =>
-        'admin.simulate_tracks.create'], */
-
-
-        // Новый раздел — цели
+        // Симуляция целей
         ['title' => 'Симуляция Цели', 'url' => route('admin.simulate_targets.index'), 'route' =>
         'admin.simulate_targets.index'],
         ['title' => 'Добавить цель', 'url' => route('admin.simulate_targets.create'), 'route' =>
