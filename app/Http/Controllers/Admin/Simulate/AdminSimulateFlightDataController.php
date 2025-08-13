@@ -11,7 +11,9 @@ class AdminSimulateFlightDataController extends Controller
 {
     public function index()
     {
-        $flights = SimulateFlightData::with('drone')->latest()->paginate(20);
+        $flights = SimulateFlightData::with('drone')
+            ->orderBy('created_at', 'asc')
+            ->paginate(20);
 
         return view('admin.simulate_flight_data.index', [
             'flights' => $flights,

@@ -5,9 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\Simulate\SimulateFlightData;
-use App\Models\Simulate\SimulateTrack;
 use App\Models\Simulate\SimulateTarget;
-use App\Models\Track;
 
 class Drone extends Model
 {
@@ -51,28 +49,12 @@ class Drone extends Model
     ];
 
     /**
-     * Реальные треки дрона
-     */
-    /* public function tracks()
-    {
-        return $this->hasMany(Track::class, 'drone_id');
-    } */
-
-    /**
      * Симуляция — полётные данные
      */
     public function simulateFlightData()
     {
         return $this->hasMany(SimulateFlightData::class, 'drone_id');
     }
-
-    /**
-     * Симуляция — треки
-     */
-    /*  public function simulateTracks()
-    {
-        return $this->hasMany(SimulateTrack::class, 'drone_id');
-    } */
 
     /**
      * Симуляция — цели
