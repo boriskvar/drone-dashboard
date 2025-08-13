@@ -69,10 +69,10 @@ class Drone extends Model
     /**
      * Симуляция — треки
      */
-    public function simulateTracks()
+    /*  public function simulateTracks()
     {
         return $this->hasMany(SimulateTrack::class, 'drone_id');
-    }
+    } */
 
     /**
      * Симуляция — цели

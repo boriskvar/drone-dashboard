@@ -11,7 +11,7 @@ Route::prefix('simulate-flight-data')->group(function () {
     Route::get('/', [ApiSimulateFlightDataController::class, 'latestPositions']);
 });
 
-Route::prefix('simulate-tracks')->group(function () {
+/* Route::prefix('simulate-tracks')->group(function () {
     Route::get('/', [ApiSimulateTrackController::class, 'index']); // Список активных дронов с треками
     Route::get('/{droneId}/track', [ApiSimulateTrackController::class, 'track']); // Трек дрона
-});
+}); */

@@ -19,10 +19,10 @@
         'admin.simulate_flight_data.create'],
 
         // Симуляция треков
-        ['title' => 'Симуляция треков', 'url' => route('admin.simulate_tracks.index'), 'route' =>
+        /* ['title' => 'Симуляция треков', 'url' => route('admin.simulate_tracks.index'), 'route' =>
         'admin.simulate_tracks.index'],
         ['title' => 'Добавить трек', 'url' => route('admin.simulate_tracks.create'), 'route' =>
-        'admin.simulate_tracks.create'],
+        'admin.simulate_tracks.create'], */
 
 
         // Новый раздел — цели
@@ -35,8 +35,7 @@
         @endphp
 
         @foreach($adminMenuItems as $item)
-        <a href="{{ $item['url'] }}"
-           class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
+        <a href="{{ $item['url'] }}" class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
             {{ $item['title'] }}
         </a>
         @endforeach
