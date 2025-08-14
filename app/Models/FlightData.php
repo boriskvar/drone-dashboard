@@ -9,10 +9,8 @@ class FlightData extends Model
 {
     use HasFactory;
 
-    // Явное указание таблицы (можно опустить, если имя модели и таблицы совпадают по Laravel naming convention)
     protected $table = 'flight_data';
 
-    // Какие поля можно массово заполнять (для create(), update())
     protected $fillable = [
         'drone_id',
         'latitude',
@@ -23,15 +21,17 @@ class FlightData extends Model
         'recorded_at',
     ];
 
-    // Отключать ли авто-таймстемпы (created_at, updated_at)
-    public $timestamps = true;
+    protected $casts = [
+        'latitude'    => 'float',
+        'longitude'   => 'float',
+        'altitude'    => 'float',
+        'speed'       => 'float',
+        'heading'     => 'float',
+        'recorded_at' => 'datetime',
+    ];
 
-    // Если используешь кастомное имя timestamp-поля (не обязательно)
-    protected $dates = ['recorded_at'];
-
-    // Связь с моделью Drone (если есть)
     public function drone()
     {
-        return $this->belongsTo(Drone::class);
+        return $this->belongsTo(\App\Models\Drone::class);
     }
 }

@@ -2,30 +2,32 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Target;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\Target;
 
 class ApiTargetController extends Controller
 {
-    public function store(Request $request): JsonResponse
+    // Назначить цель дрону (создать запись)
+    public function store(Request $request)
     {
-        $data = $request->validate([
-            'drone_id' => 'required|exists:drones,id',
-            'lat' => 'required|numeric',
-            'lng' => 'required|numeric',
+        $validated = $request->validate([
+            'drone_id'    => 'required|exists:drones,id',
+            'latitude'    => 'required|numeric',
+            'longitude'   => 'required|numeric',
         ]);
 
         $target = Target::updateOrCreate(
-            ['drone_id' => $data['drone_id']],
-            ['lat' => $data['lat'], 'lng' => $data['lng']]
+            ['drone_id' => $validated['drone_id']],
+            [
+                'latitude' => $validated['latitude'],
+                'longitude' => $validated['longitude'],
+            ]
         );
 
         return response()->json([
-            'status' => 'ok',
-            'message' => 'Цель успешно сохранена',
+            'message' => 'Цель успешно назначена',
             'target' => $target,
-        ], 201); // <== Явно укажем статус 201
+        ], 201);
     }
 }

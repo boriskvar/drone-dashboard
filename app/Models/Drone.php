@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use App\Models\Simulate\SimulateFlightData;
-use App\Models\Simulate\SimulateTarget;
+use App\Models\FlightData;
+use App\Models\Target;
 
 class Drone extends Model
 {
@@ -53,7 +53,7 @@ class Drone extends Model
      */
     public function simulateFlightData()
     {
-        return $this->hasMany(SimulateFlightData::class, 'drone_id');
+        return $this->hasMany(FlightData::class, 'drone_id');
     }
 
     /**
@@ -61,6 +61,6 @@ class Drone extends Model
      */
     public function simulateTargets()
     {
-        return $this->hasMany(SimulateTarget::class, 'drone_id');
+        return $this->hasMany(Target::class, 'drone_id');
     }
 }

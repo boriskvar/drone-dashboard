@@ -7,7 +7,12 @@ use App\Models\Drone;
 
 class Target extends Model
 {
-    protected $fillable = ['drone_id', 'lat', 'lng'];
+    protected $fillable = ['drone_id', 'latitude', 'longitude'];
+
+    protected $casts = [
+        'latitude'  => 'float',
+        'longitude' => 'float',
+    ];
 
     public function drone()
     {

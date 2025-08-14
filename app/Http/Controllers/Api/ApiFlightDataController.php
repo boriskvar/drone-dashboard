@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Api\Simulate;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use App\Models\Simulate\SimulateFlightData;
-use App\Models\Simulate\SimulateTarget;
+use App\Models\FlightData;
+use App\Models\Target;
 use App\Models\Drone;
 
-class ApiSimulateFlightDataController extends Controller
+class ApiFlightDataController extends Controller
 {
 
     /**
@@ -22,18 +21,18 @@ class ApiSimulateFlightDataController extends Controller
         $result = [];
 
         foreach ($drones as $drone) {
-            $track = SimulateFlightData::where('drone_id', $drone->id)
+            $track = FlightData::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->limit(20)
                 ->get(['latitude', 'longitude'])
                 ->reverse()
                 ->values();
 
-            $last = SimulateFlightData::where('drone_id', $drone->id)
+            $last = FlightData::where('drone_id', $drone->id)
                 ->orderByDesc('created_at')
                 ->first(['latitude', 'longitude', 'altitude', 'speed', 'heading', 'created_at']);
 
-            $target = SimulateTarget::where('drone_id', $drone->id)->first(['latitude', 'longitude']);
+            $target = Target::where('drone_id', $drone->id)->first(['latitude', 'longitude']);
 
             if ($last) {
                 $result[] = [
