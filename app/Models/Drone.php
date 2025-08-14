@@ -49,17 +49,17 @@ class Drone extends Model
     ];
 
     /**
-     * Симуляция — полётные данные
+     * Полётные данные
      */
-    public function simulateFlightData()
+    public function flightData()
     {
         return $this->hasMany(FlightData::class, 'drone_id');
     }
 
     /**
-     * Симуляция — цели
+     * Цели
      */
-    public function simulateTargets()
+    public function targets()
     {
         return $this->hasMany(Target::class, 'drone_id');
     }

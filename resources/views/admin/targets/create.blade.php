@@ -15,7 +15,7 @@
 </div>
 @endif
 
-<form action="{{ route('admin.simulate_targets.store') }}" method="POST">
+<form action="{{ route('admin.targets.store') }}" method="POST">
     @csrf
 
     <div class="mb-3">
@@ -31,31 +31,15 @@
 
     <div class="mb-3">
         <label for="latitude" class="form-label">Широта (latitude)</label>
-        <input
-               type="number"
-               step="any"
-               name="latitude"
-               id="latitude"
-               class="form-control"
-               placeholder="Например: 50.4501"
-               title="Широта: положительные значения — север, отрицательные — юг"
-               required>
+        <input type="number" step="any" name="latitude" id="latitude" class="form-control" placeholder="Например: 50.4501" title="Широта: положительные значения — север, отрицательные — юг" required>
     </div>
 
     <div class="mb-3">
         <label for="longitude" class="form-label">Долгота (longitude)</label>
-        <input
-               type="number"
-               step="any"
-               name="longitude"
-               id="longitude"
-               class="form-control"
-               placeholder="Например: 30.5234"
-               title="Долгота: положительные значения — восток, отрицательные — запад"
-               required>
+        <input type="number" step="any" name="longitude" id="longitude" class="form-control" placeholder="Например: 30.5234" title="Долгота: положительные значения — восток, отрицательные — запад" required>
     </div>
 
     <button type="submit" class="btn btn-primary">Сохранить</button>
-    <a href="{{ route('admin.simulate_targets.index') }}" class="btn btn-secondary">Отмена</a>
+    <a href="{{ route('admin.targets.index') }}" class="btn btn-secondary">Отмена</a>
 </form>
 @endsection

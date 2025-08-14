@@ -11,13 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('simulate_targets', function (Blueprint $table) {
+        Schema::create('flight_data', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('drone_id')->constrained()->onDelete('cascade');
-
+            $table->unsignedBigInteger('drone_id');
             $table->decimal('latitude', 8, 4);
             $table->decimal('longitude', 8, 4);
+            $table->float('altitude')->nullable();
+            $table->float('speed')->nullable();
+            $table->float('heading')->nullable();
+            $table->timestamp('recorded_at')->useCurrent();
             $table->timestamps();
+
+            $table->foreign('drone_id')->references('id')->on('drones')->onDelete('cascade');
         });
     }
 
@@ -26,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('simulate_targets');
+        Schema::dropIfExists('flight_data');
     }
 };

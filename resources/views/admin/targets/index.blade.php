@@ -10,7 +10,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('admin.simulate_targets.create') }}" class="btn btn-primary mb-3">+ Добавить цель</a>
+    <a href="{{ route('admin.targets.create') }}" class="btn btn-primary mb-3">+ Добавить цель</a>
 
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
@@ -30,11 +30,9 @@
                 <td>{{ $target->longitude }}</td>
                 <td>{{ $target->created_at->format('d.m.Y H:i') }}</td>
                 <td class="d-flex gap-1">
-                    <a href="{{ route('admin.simulate_targets.edit', $target) }}" class="btn btn-sm btn-primary"
-                       title="Редактировать">✏️</a>
+                    <a href="{{ route('admin.targets.edit', $target) }}" class="btn btn-sm btn-primary" title="Редактировать">✏️</a>
 
-                    <form method="POST" action="{{ route('admin.simulate_targets.destroy', $target) }}"
-                          onsubmit="return confirm('Удалить цель?')" style="display:inline-block;">
+                    <form method="POST" action="{{ route('admin.targets.destroy', $target) }}" onsubmit="return confirm('Удалить цель?')" style="display:inline-block;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-sm btn-danger" title="Удалить">🗑️</button>

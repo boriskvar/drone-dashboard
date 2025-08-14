@@ -7,17 +7,17 @@
         ['title' => 'Дроны', 'url' => route('admin.drones.index'), 'route' => 'admin.drones.index'],
         ['title' => 'Добавить дрон', 'url' => route('admin.drones.create'), 'route' => 'admin.drones.create'],
 
-        // Симуляция данных полета
-        ['title' => 'Симуляция данных полёта', 'url' => route('admin.simulate_flight_data.index'), 'route' =>
-        'admin.simulate_flight_data.index'],
-        ['title' => 'Добавить данные полёта', 'url' => route('admin.simulate_flight_data.create'), 'route' =>
-        'admin.simulate_flight_data.create'],
+        // данные полета
+        ['title' => 'Данные полёта', 'url' => route('admin.flight_data.index'), 'route' =>
+        'admin.flight_data.index'],
+        ['title' => 'Добавить данные полёта', 'url' => route('admin.flight_data.create'), 'route' =>
+        'admin.flight_data.create'],
 
-        // Симуляция целей
-        ['title' => 'Симуляция Цели', 'url' => route('admin.simulate_targets.index'), 'route' =>
-        'admin.simulate_targets.index'],
-        ['title' => 'Добавить цель', 'url' => route('admin.simulate_targets.create'), 'route' =>
-        'admin.simulate_targets.create'],
+        // цели
+        ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' =>
+        'admin.targets.index'],
+        ['title' => 'Добавить цель', 'url' => route('admin.targets.create'), 'route' =>
+        'admin.targets.create'],
         ];
 
         @endphp

@@ -10,7 +10,7 @@
     <div class="alert alert-success">{{ session('success') }}</div>
     @endif
 
-    <a href="{{ route('admin.simulate_flight_data.create') }}" class="btn btn-success mb-3">
+    <a href="{{ route('admin.flight_data.create') }}" class="btn btn-success mb-3">
         ➕ Добавить данные
     </a>
 
@@ -41,13 +41,11 @@
                     <td>{{ $flight->heading !== null ? number_format($flight->heading, 1) : '—' }}</td>
                     <td>{{ $flight->created_at->format('Y-m-d H:i') }}</td>
                     <td class="d-flex gap-1">
-                        <a href="{{ route('admin.simulate_flight_data.edit', $flight) }}"
-                           class="btn btn-sm btn-primary" title="Редактировать">
+                        <a href="{{ route('admin.flight_data.edit', $flight) }}" class="btn btn-sm btn-primary" title="Редактировать">
                             ✏️
                         </a>
 
-                        <form action="{{ route('admin.simulate_flight_data.destroy', $flight) }}"
-                              method="POST" onsubmit="return confirm('Удалить запись?')">
+                        <form action="{{ route('admin.flight_data.destroy', $flight) }}" method="POST" onsubmit="return confirm('Удалить запись?')">
                             @csrf
                             @method('DELETE')
                             <button class="btn btn-sm btn-danger" title="Удалить">
