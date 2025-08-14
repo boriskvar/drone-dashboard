@@ -1,43 +1,72 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\ApiFlightDataController;   // store(), track(), show()
-use App\Http\Controllers\Api\ApiImageController;       // store()
-use App\Http\Controllers\Api\ApiDetectionController;   // index()
-use App\Http\Controllers\Api\ApiTargetController;      // (опционально) show()
+use App\Http\Controllers\Api\ApiFlightDataController;   // Данные полёта (store, show, track)
+use App\Http\Controllers\Api\ApiImageController;        // Загрузка изображений
+use App\Http\Controllers\Api\ApiDetectionController;    // Распознавание объектов
+use App\Http\Controllers\Api\ApiTargetController;       // Текущая цель
 
-// Чтобы {drone} был числом
+// Ограничение: параметр {drone} всегда число
 Route::pattern('drone', '[0-9]+');
 
+// --- Маршруты для работы с дронами ---
 Route::prefix('drones')->group(function () {
 
-    // 1) Прислать данные flight-data (эмулятор или реальный дрон шлёт POST)
-    //    body: { latitude, longitude, altitude?, speed?, heading?, captured_at? }
+    /**
+     * 📍 Получить последние координаты ВСЕХ дронов
+     * Метод: GET /api/drones/flight-data
+     * Возвращает массив с последними позициями и дополнительными данными
+     */
+    Route::get('flight-data', [ApiFlightDataController::class, 'latestPositions'])
+        ->name('api.drones.flight-data.latest');
+
+    /**
+     * 📍 Прислать данные полёта ОДНОГО дрона
+     * Метод: POST /api/drones/{drone}/flight-data
+     * Тело запроса: { latitude, longitude, altitude?, speed?, heading?, captured_at? }
+     */
     Route::post('{drone}/flight-data', [ApiFlightDataController::class, 'store'])
         ->name('api.drones.flight-data.store');
 
-    // Получить последние данные одного дрона (для фронта)
+    /**
+     * 📍 Получить последние данные ОДНОГО дрона
+     * Метод: GET /api/drones/{drone}/flight-data
+     */
     Route::get('{drone}/flight-data', [ApiFlightDataController::class, 'show'])
         ->name('api.drones.flight-data.show');
 
-    // 2) Получить трек (например, за последний час/день — параметры можно добавить позже)
+    /**
+     * 📍 Получить трек движения дрона
+     * Метод: GET /api/drones/{drone}/track
+     * Параметры фильтра (опционально) можно добавить позже: за час, за день и т.п.
+     */
     Route::get('{drone}/track', [ApiFlightDataController::class, 'track'])
         ->name('api.drones.track');
 
-    // 3) Загрузка изображения/кадра (multipart или base64 — решим в контроллере)
+    /**
+     * 📍 Загрузить изображение или кадр от дрона
+     * Метод: POST /api/drones/{drone}/image
+     * Форматы: multipart/form-data или base64 (реализуется в контроллере)
+     */
     Route::post('{drone}/image', [ApiImageController::class, 'store'])
         ->name('api.drones.image.store');
 
-    // 4) Результаты распознавания объектов (для фронта)
+    /**
+     * 📍 Получить результаты распознавания объектов дрона
+     * Метод: GET /api/drones/{drone}/detections
+     */
     Route::get('{drone}/detections', [ApiDetectionController::class, 'index'])
         ->name('api.drones.detections.index');
 
-    // 5) (Опционально) Получить текущую цель из БД отдельным запросом,
-    //    если тебе нужно вызывать её независимо от simulate-flight-data
+    /**
+     * 📍 (Опционально) Получить текущую цель дрона
+     * Метод: GET /api/drones/{drone}/target
+     * Может использоваться независимо от simulate-flight-data
+     */
     Route::get('{drone}/target', [ApiTargetController::class, 'show'])
         ->name('api.drones.target.show');
-});
 
-// Дополнительно: получить координаты всех дронов (фронт)
-Route::get('flight-data', [ApiFlightDataController::class, 'latestPositions'])
-    ->name('api.flight-data.latest');
+    // Назначить цель дрону
+    Route::post('{drone}/target', [ApiTargetController::class, 'update'])
+        ->name('api.drones.target.update');
+});
