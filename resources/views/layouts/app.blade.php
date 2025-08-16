@@ -18,10 +18,10 @@
 
 <body class="font-sans antialiased">
     <div class="min-h-screen bg-gray-100">
-        @include('layouts.navigation')
+        @include('layouts.navigation') {{-- Навигация вынесена в отдельный layouts.navigation --}}
 
         <!-- Page Heading -->
-        @isset($header)
+        @isset($header) {{-- Опциональный $header рендерится только если установлен. --}}
         <header class="bg-white shadow">
             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                 {{ $header }}
@@ -31,7 +31,7 @@
 
         <!-- Page Content -->
         <main>
-            {{ $slot }}
+            {{ $slot }} {{--  $slot - используется для контента страницы (главный контейнер). --}}
         </main>
     </div>
 </body>

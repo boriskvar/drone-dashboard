@@ -12,7 +12,8 @@ import DroneMap from './components/DroneMap.vue'; // ✅ добавили
 window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-// --- Vue-приложение  на странице, если он нужен
+// --- Vue-приложение  на странице, если он нужен (Vue создаётся только если есть <div id="app">)
+// Компоненты ExampleComponent и DroneMap зарегистрированы глобально
 document.addEventListener('DOMContentLoaded', () => {
     const el = document.getElementById('app');
     if (el) {
@@ -25,6 +26,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.warn('Vue: элемент #app не найден');
     }
 
-    // --- Остальной JS, НЕ внутри Vue
+    // --- Остальной JS, НЕ внутри Vue (работает вне Vue)
     console.log('Bootstrap + Vue layout loaded');
 });

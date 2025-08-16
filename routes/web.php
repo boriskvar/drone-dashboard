@@ -6,9 +6,10 @@ use App\Http\Controllers\Operator\OperatorController;
 
 // Панель оператора (карта)
 Route::prefix('operator')->name('operator.')->group(function () {
-    // Route::get('/', [OperatorController::class, 'index'])->name('index');
-    // Route::get('/map', [OperatorController::class, 'map'])->name('map');
-    Route::get('/', [OperatorController::class, 'map'])->name('map');
+    // Route::get('/', [OperatorController::class, 'index'])->name('index'); // главная страница оператора
+    // Route::get('/map', [OperatorController::class, 'map'])->name('map');  // карта дронов
+    Route::get('/', [OperatorController::class, 'map'])->name('map');  // карта дронов
+    // Route::get('/', [OperatorController::class, 'map'])->name('map');
 });
 
 // Группа аутентифицированных маршрутов
@@ -27,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Главный редирект (на dashboard или operator - выбирайте)
 // Route::redirect('/', '/dashboard'); // Или '/operator'
 // Редирект на operator по умолчанию
-Route::redirect('/', '/operator');
+// Route::redirect('/', '/operator');
 
 
 // Админ-маршруты
