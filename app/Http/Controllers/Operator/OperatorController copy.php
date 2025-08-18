@@ -31,7 +31,8 @@ class OperatorController extends Controller
         return view('operator.map', [
             'drones' => $drones,
             'menuItems' => $this->getMenuItems(), // ✅ общее меню
-            'activeRoute' => 'operator.map'       // ✅ текущий активный
+            // 'activeRoute' => 'operator.map'       // ✅ текущий активный
+            'activeRoute' => 'map'       // ✅ текущий активный
         ]);
     }
 
@@ -45,8 +46,9 @@ class OperatorController extends Controller
             // ],
             [
                 'title' => 'Карта дронов',
-                'url' => route('operator.map'),
-                'route' => 'operator.map'
+                // 'url' => route('operator.map'),
+                'url' => route('map'),
+                'route' => 'map'
             ]
         ];
     }

@@ -21,11 +21,11 @@ class OperatorController extends Controller
             'menuItems' => [
                 [
                     'title' => 'Карта дронов',
-                    'url' => route('operator.map'),
-                    'route' => 'operator.map'
+                    'url' => route('map'),
+                    'route' => 'map'
                 ]
             ],
-            'activeRoute' => 'operator.map'
+            'activeRoute' => 'map'
         ]);
     }
 }
