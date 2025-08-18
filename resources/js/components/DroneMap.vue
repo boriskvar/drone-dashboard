@@ -5,6 +5,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import L from 'leaflet'
+import 'leaflet-rotatedmarker';
 
 // Фикс путей к иконкам (иначе они не отображаются в Laravel + Vite)
 // Фикс иконок
