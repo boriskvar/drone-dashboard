@@ -13,6 +13,18 @@ Route::pattern('drone', '[0-9]+');
 Route::prefix('drones')->group(function () {
 
     /**
+     * 📍 Получить текущую цель дрона
+     * Метод: GET /api/drones/{drone}/target
+     * Может использоваться независимо от simulate-flight-data
+     */
+    Route::get('{drone}/target', [ApiTargetController::class, 'show'])
+        ->name('api.drones.target.show');
+
+    // Назначить цель дрону
+    Route::post('{drone}/target', [ApiTargetController::class, 'update'])
+        ->name('api.drones.target.update');
+
+    /**
      * 📍 Получить последние координаты ВСЕХ дронов
      * Метод: GET /api/drones/flight-data
      * Возвращает массив с последними позициями и дополнительными данными
@@ -57,16 +69,4 @@ Route::prefix('drones')->group(function () {
      */
     Route::get('{drone}/detections', [ApiDetectionController::class, 'index'])
         ->name('api.drones.detections.index');
-
-    /**
-     * 📍 (Опционально) Получить текущую цель дрона
-     * Метод: GET /api/drones/{drone}/target
-     * Может использоваться независимо от simulate-flight-data
-     */
-    Route::get('{drone}/target', [ApiTargetController::class, 'show'])
-        ->name('api.drones.target.show');
-
-    // Назначить цель дрону
-    Route::post('{drone}/target', [ApiTargetController::class, 'update'])
-        ->name('api.drones.target.update');
 });

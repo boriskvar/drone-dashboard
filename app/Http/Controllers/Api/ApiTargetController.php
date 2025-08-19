@@ -6,47 +6,38 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Target;
+use App\Models\Drone;
 
 class ApiTargetController extends Controller
 {
-    // Назначить цель дрону (создать запись)
-    public function store(Request $request): JsonResponse
+    /**
+     * 📍 Показать цель дрона
+     * GET /api/drones/{drone}/target
+     */
+    public function show(Drone $drone): JsonResponse
     {
-        $validated = $request->validate([
-            'drone_id'    => 'required|exists:drones,id',
-            'latitude'    => 'required|numeric',
-            'longitude'   => 'required|numeric',
-        ]);
-
-        $target = Target::updateOrCreate(
-            ['drone_id' => $validated['drone_id']],
-            [
-                'latitude' => $validated['latitude'],
-                'longitude' => $validated['longitude'],
-            ]
-        );
-
-        return response()->json([
-            'message' => 'Цель успешно назначена',
-            'target' => $target,
-        ], 201);
+        return response()->json($drone->target);
     }
 
-    public function update(Request $request, $drone): JsonResponse
+    /**
+     * 🎯 Обновить или назначить цель дрону
+     * PATCH /api/drones/{drone}/target
+     */
+    public function update(Request $request, Drone $drone): JsonResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
         ]);
 
         $target = Target::updateOrCreate(
-            ['drone_id' => $drone],
-            [
-                'latitude' => $request->latitude,
-                'longitude' => $request->longitude,
-            ]
+            ['drone_id' => $drone->id],
+            $validated
         );
 
-        return response()->json($target);
+        return response()->json([
+            'message' => 'Цель успешно назначена',
+            'target'  => $target,
+        ]);
     }
 }
