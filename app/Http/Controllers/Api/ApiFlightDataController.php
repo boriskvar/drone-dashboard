@@ -7,6 +7,7 @@ use Illuminate\Http\JsonResponse;
 use App\Models\FlightData;
 use App\Models\Target;
 use App\Models\Drone;
+use Illuminate\Http\Request;
 
 class ApiFlightDataController extends Controller
 {
@@ -86,5 +87,32 @@ class ApiFlightDataController extends Controller
             'track'      => $track,
             'target'     => $target,
         ];
+    }
+
+
+
+    /**
+     * ▶️ Запуск симуляции движения для дрона
+     */
+    public function startSimulation(Drone $drone, Request $request)
+    {
+        // Тут позже будет запуск генератора координат (Job / Command / Service)
+        // Пока делаем заглушку
+        return response()->json([
+            'status' => 'ok',
+            'message' => "Симуляция запущена для дрона #{$drone->id}",
+        ]);
+    }
+
+    /**
+     * ⏹ Остановка симуляции движения для дрона
+     */
+    public function stopSimulation(Drone $drone)
+    {
+        // Тут позже будет остановка генератора
+        return response()->json([
+            'status' => 'ok',
+            'message' => "Симуляция остановлена для дрона #{$drone->id}",
+        ]);
     }
 }

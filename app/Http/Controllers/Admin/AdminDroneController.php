@@ -104,4 +104,28 @@ class AdminDroneController extends Controller
         return redirect()->route('admin.drones.index')
             ->with('success', 'Дрон сдвинут на карте!');
     } */
+
+    // Страница симуляции
+    public function simulation()
+    {
+        $drones = Drone::all();
+        return view('admin.simulation.index', compact('drones'));
+    }
+
+    // Запуск симуляции
+    public function startSimulation(Drone $drone)
+    {
+        // Вызов твоего сервиса симуляции (Job / Command)
+        // Например: DroneSimulator::start($drone->id);
+        return redirect()->route('admin.simulation.index')
+            ->with('success', "Симуляция для дрона {$drone->id} запущена");
+    }
+
+    // Остановка симуляции
+    public function stopSimulation(Drone $drone)
+    {
+        // Например: DroneSimulator::stop($drone->id);
+        return redirect()->route('admin.simulation.index')
+            ->with('success', "Симуляция для дрона {$drone->id} остановлена");
+    }
 }

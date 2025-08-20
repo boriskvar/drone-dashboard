@@ -12,17 +12,6 @@ Route::pattern('drone', '[0-9]+');
 // --- Маршруты для работы с дронами ---
 Route::prefix('drones')->group(function () {
 
-    /**
-     * 📍 Получить текущую цель дрона
-     * Метод: GET /api/drones/{drone}/target
-     * Может использоваться независимо от simulate-flight-data
-     */
-    Route::get('{drone}/target', [ApiTargetController::class, 'show'])
-        ->name('api.drones.target.show');
-
-    // Назначить цель дрону
-    Route::post('{drone}/target', [ApiTargetController::class, 'update'])
-        ->name('api.drones.target.update');
 
     /**
      * 📍 Получить последние координаты ВСЕХ дронов
@@ -47,6 +36,7 @@ Route::prefix('drones')->group(function () {
     Route::get('{drone}/flight-data', [ApiFlightDataController::class, 'show'])
         ->name('api.drones.flight-data.show');
 
+
     /**
      * 📍 Получить трек движения дрона
      * Метод: GET /api/drones/{drone}/track
@@ -54,6 +44,35 @@ Route::prefix('drones')->group(function () {
      */
     Route::get('{drone}/track', [ApiFlightDataController::class, 'track'])
         ->name('api.drones.track');
+
+    /**
+     * 🛠 Маршруты для симуляции движения
+     */
+    Route::prefix('simulation')->group(function () {
+        // Запуск симуляции для конкретного дрона
+        Route::post('start/{drone}', [ApiFlightDataController::class, 'startSimulation'])
+            ->name('api.drones.simulation.start');
+
+        // Остановка симуляции
+        Route::post('stop/{drone}', [ApiFlightDataController::class, 'stopSimulation'])
+            ->name('api.drones.simulation.stop');
+    });
+
+
+    /**
+     * 📍 Получить текущую цель дрона
+     * Метод: GET /api/drones/{drone}/target
+     * Может использоваться независимо от simulate-flight-data
+     */
+    Route::get('{drone}/target', [ApiTargetController::class, 'show'])
+        ->name('api.drones.target.show');
+
+    // Назначить цель дрону
+    Route::post('{drone}/target', [ApiTargetController::class, 'update'])
+        ->name('api.drones.target.update');
+
+
+
 
     /**
      * 📍 Загрузить изображение или кадр от дрона

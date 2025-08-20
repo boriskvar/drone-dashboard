@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDroneController;
 use App\Http\Controllers\Admin\AdminTargetController;
 use App\Http\Controllers\Admin\AdminFlightDataController;
+use App\Http\Controllers\Admin\AdminSimulationController;
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
@@ -39,5 +40,23 @@ Route::middleware(['auth', 'admin'])
             Route::get('{target}/edit', [AdminTargetController::class, 'edit'])->name('admin.targets.edit');
             Route::put('{target}', [AdminTargetController::class, 'update'])->name('admin.targets.update');
             Route::delete('{target}', [AdminTargetController::class, 'destroy'])->name('admin.targets.destroy');
+        });
+
+        // 🚀 Маршруты для симуляции движения дронов
+        /* Route::prefix('simulation')->name('admin.simulation.')->group(function () {
+            Route::post('start/{drone}', [ApiFlightDataController::class, 'startSimulation'])->name('start');
+            Route::post('stop/{drone}', [ApiFlightDataController::class, 'stopSimulation'])->name('stop');
+        }); */
+
+        // 🚀 Маршруты для симуляции дронов
+        /*  Route::prefix('simulation')->name('admin.simulation.')->group(function () {
+            Route::post('start/{drone}', [AdminSimulationController::class, 'start'])->name('start');
+            Route::post('stop/{drone}', [AdminSimulationController::class, 'stop'])->name('stop');
+        }); */
+
+        Route::prefix('simulation')->name('admin.simulation.')->group(function () {
+            Route::get('/', [AdminDroneController::class, 'simulation'])->name('index');
+            Route::post('start/{drone}', [AdminDroneController::class, 'startSimulation'])->name('start');
+            Route::post('stop/{drone}', [AdminDroneController::class, 'stopSimulation'])->name('stop');
         });
     });

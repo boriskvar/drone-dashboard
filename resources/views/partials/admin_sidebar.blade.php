@@ -13,6 +13,13 @@
         ['title' => 'Добавить данные полёта', 'url' => route('admin.flight_data.create'), 'route' =>
         'admin.flight_data.create'],
 
+        // симуляция
+        // ['title' => 'Симуляция', 'url' => route('admin.drones.index') . '#simulation', 'route' =>
+        // 'admin.simulation'],
+        ['title' => 'Симуляция', 'url' => route('admin.simulation.index'), 'route' => 'admin.simulation.index'],
+
+
+
         // цели
         ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' =>
         'admin.targets.index'],
@@ -23,7 +30,8 @@
         @endphp
 
         @foreach($adminMenuItems as $item)
-        <a href="{{ $item['url'] }}" class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
+        <a href="{{ $item['url'] }}"
+           class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
             {{ $item['title'] }}
         </a>
         @endforeach
