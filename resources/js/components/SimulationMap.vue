@@ -7,15 +7,16 @@ import { onMounted } from 'vue'
 import L from 'leaflet'
 
 let map
-let markers = {}   // маркеры дронов
-let polylines = {} // линии треков дронов
+let markers = {}
+let polylines = {}
+let firstFit = true // флаг, чтобы fitBounds сделать только один раз
 
 // --- Иконка дрона (стрелка) ---
 function createDroneIcon(rotation = 0) {
     return L.divIcon({
         html: `<img src="/images/drone-arrow.svg" style="width:40px; transform: rotate(${rotation}deg)">`,
         iconSize: [40, 40],
-        className: "" // убираем стандартные стили Leaflet
+        className: ""
     })
 }
 
@@ -25,13 +26,17 @@ const fetchDrones = async () => {
         const response = await fetch('/api/drones/flight-data')
         const drones = await response.json()
 
+        let bounds = [] // сюда будем собирать координаты
+
         drones.forEach(drone => {
             const lat = drone.latitude
             const lng = drone.longitude
 
             if (!lat || !lng) return
 
-            // --- обновляем или создаём маркер ---
+            bounds.push([lat, lng]) // добавляем для автоцентра
+
+            // --- маркер ---
             if (markers[drone.id]) {
                 markers[drone.id].setLatLng([lat, lng])
                 markers[drone.id].setIcon(createDroneIcon(drone.heading ?? 0))
@@ -48,7 +53,7 @@ const fetchDrones = async () => {
                 `)
             }
 
-            // --- обновляем или создаём трек ---
+            // --- трек ---
             if (drone.track && drone.track.length > 1) {
                 const trackLatLngs = drone.track.map(p => [p.latitude, p.longitude])
 
@@ -62,20 +67,26 @@ const fetchDrones = async () => {
                 }
             }
         })
+
+        // --- Автоцентрирование (только первый раз) ---
+        if (firstFit && bounds.length > 0) {
+            map.fitBounds(bounds, { padding: [50, 50] })
+            firstFit = false
+        }
     } catch (error) {
         console.error('Ошибка загрузки дронов:', error)
     }
 }
 
 onMounted(() => {
-    map = L.map("simulation-map").setView([50.4501, 30.5234], 6) // Киев
+    map = L.map("simulation-map").setView([50.4501, 30.5234], 6)
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map)
 
     fetchDrones()
-    setInterval(fetchDrones, 3000) // каждые 3 сек
+    setInterval(fetchDrones, 3000)
 })
 </script>
 
