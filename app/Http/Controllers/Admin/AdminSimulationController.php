@@ -9,6 +9,15 @@ use App\Models\Drone;
 
 class AdminSimulationController extends Controller
 {
+
+    public function simulation()
+    {
+        $drones = Drone::all();
+        // dd($drones->toArray()); // Debugging line to check drones data
+
+        return view('admin.simulation.index', compact('drones'));
+    }
+
     // Запуск симуляции
     public function start(Drone $drone)
     {

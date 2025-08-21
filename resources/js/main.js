@@ -7,6 +7,7 @@ import { createApp } from 'vue';
 
 import ExampleComponent from './components/ExampleComponent.vue';
 import DroneMap from './components/DroneMap.vue'; // ✅ добавили
+import SimulationMap from './components/SimulationMap.vue';
 
 // Глобально доступный axios
 window.axios = axios;
@@ -20,6 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const app = createApp({});
         app.component('example-component', ExampleComponent);
         app.component('drone-map', DroneMap);
+        app.component('simulation-map', SimulationMap);
 
         app.mount(el);
     } else {

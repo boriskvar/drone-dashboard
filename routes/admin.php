@@ -10,6 +10,13 @@ Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
 
+        // 🚀 Маршруты для симуляции дронов
+        Route::prefix('simulation')->name('admin.simulation.')->group(function () {
+            Route::get('/', [AdminSimulationController::class, 'simulation'])->name('index');
+            Route::post('start/{drone}', [AdminSimulationController::class, 'start'])->name('start');
+            Route::post('stop/{drone}', [AdminSimulationController::class, 'stop'])->name('stop');
+        });
+
         // 📦 CRUD для дронов
         Route::prefix('drones')->group(function () {
             Route::get('/', [AdminDroneController::class, 'index'])->name('admin.drones.index');
@@ -53,10 +60,4 @@ Route::middleware(['auth', 'admin'])
             Route::post('start/{drone}', [AdminSimulationController::class, 'start'])->name('start');
             Route::post('stop/{drone}', [AdminSimulationController::class, 'stop'])->name('stop');
         }); */
-
-        Route::prefix('simulation')->name('admin.simulation.')->group(function () {
-            Route::get('/', [AdminDroneController::class, 'simulation'])->name('index');
-            Route::post('start/{drone}', [AdminDroneController::class, 'startSimulation'])->name('start');
-            Route::post('stop/{drone}', [AdminDroneController::class, 'stopSimulation'])->name('stop');
-        });
     });

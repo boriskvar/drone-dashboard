@@ -3,8 +3,23 @@
 @section('title', 'Симуляция движения дронов')
 
 @section('content')
+
+{{-- @php
+dd($drones->toArray()); // Debugging line to check drones data
+@endphp --}}
+
 <div class="container mt-4">
     <h1 class="mb-4">Симуляция движения дронов</h1>
+
+    {{-- Debug --}}
+    {{-- <pre>
+        {{ print_r($drones->toArray(), true) }}
+    </pre> --}}
+
+    <!-- Vue-компонент с передачей всех дронов -->
+    <div id="app">
+        <simulation-map :drones='@json($drones)'></simulation-map>
+    </div>
 
     @if(session('success'))
     <div class="alert alert-success">{{ session('success') }}</div>
@@ -43,4 +58,8 @@
         </tbody>
     </table>
 </div>
+
+<!-- Подключение сборки Vite -->
+@vite('resources/js/app.js')
+
 @endsection
