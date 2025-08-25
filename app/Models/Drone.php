@@ -17,6 +17,7 @@ class Drone extends Model
         'latitude',
         'longitude',
         'model',
+        'is_simulating',
         'serial_number',
         'manufacturer',
         'manufacture_date',
@@ -46,6 +47,7 @@ class Drone extends Model
 
     protected $casts = [
         'manufacture_date' => 'datetime:Y-m-d',
+        'is_simulating'    => 'boolean',
     ];
 
     /**

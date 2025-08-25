@@ -4,34 +4,30 @@
 
 @section('content')
 
-{{-- @php
-dd($drones->toArray()); // Debugging line to check drones data
-@endphp --}}
-
 <div class="container mt-4">
     <h1 class="mb-4">Симуляция движения дронов</h1>
 
-    {{-- Debug --}}
-    {{-- <pre>
-        {{ print_r($drones->toArray(), true) }}
-    </pre> --}}
+    {{-- Сообщения об успехе/ошибке --}}
+    @if(session('success'))
+    <div class="alert alert-success">{{ session('success') }}</div>
+    @endif
+    @if(session('warning'))
+    <div class="alert alert-warning">{{ session('warning') }}</div>
+    @endif
 
-    <!-- Vue-компонент с передачей всех дронов -->
+    <!-- Vue-компонент с картой -->
     <div id="app">
         <simulation-map :drones='@json($drones)'></simulation-map>
     </div>
 
-    @if(session('success'))
-    <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped mt-4">
         <thead class="table-dark">
             <tr>
                 <th>ID</th>
                 <th>Имя</th>
                 <th>Широта</th>
                 <th>Долгота</th>
+                <th>Статус</th>
                 <th>Действия</th>
             </tr>
         </thead>
@@ -42,16 +38,29 @@ dd($drones->toArray()); // Debugging line to check drones data
                 <td>{{ $drone->name }}</td>
                 <td>{{ $drone->latitude }}</td>
                 <td>{{ $drone->longitude }}</td>
+                <td>
+                    @if($drone->is_simulating)
+                    <span class="badge bg-success">В полёте</span>
+                    @else
+                    <span class="badge bg-secondary">Стоит</span>
+                    @endif
+                </td>
                 <td class="d-flex gap-2">
-                    <form action="{{ route('admin.simulation.start', $drone) }}" method="POST">
+                    @if(!$drone->is_simulating)
+                    <!-- 🚀 Запустить симуляцию -->
+                    <form action="{{ route('admin.simulation.start', $drone) }}" method="POST"
+                          onsubmit="return confirm('Запустить симуляцию для дрона {{ $drone->name }}?')">
                         @csrf
                         <button class="btn btn-sm btn-success">▶️ Старт</button>
                     </form>
-
-                    <form action="{{ route('admin.simulation.stop', $drone) }}" method="POST">
+                    @else
+                    <!-- 🛑 Остановить симуляцию -->
+                    <form action="{{ route('admin.simulation.stop', $drone) }}" method="POST"
+                          onsubmit="return confirm('Остановить симуляцию для дрона {{ $drone->name }}?')">
                         @csrf
                         <button class="btn btn-sm btn-danger">⏹ Стоп</button>
                     </form>
+                    @endif
                 </td>
             </tr>
             @endforeach
