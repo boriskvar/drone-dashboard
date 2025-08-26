@@ -1,0 +1,108 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Models\Image;
+use App\Models\Detection;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
+
+class AdminDetectionController extends Controller
+{
+    /**
+     * Список обнаружений
+     */
+    public function index()
+    {
+        $detections = Detection::with('image')->paginate(15);
+
+        return view('admin.detections.index', [
+            'detections' => $detections,
+            'activeRoute' => 'admin.detections.index',
+        ]);
+    }
+
+    /**
+     * Форма создания
+     */
+    public function create()
+    {
+        $images = Image::all(); // чтобы выбрать картинку
+        return view('admin.detections.create', compact('images'));
+    }
+
+    /**
+     * Сохранение картинки
+     */
+    public function store(Request $request)
+    {
+        $data = $request->validate([
+            'image_id' => 'required|exists:images,id',
+            'target'  => 'required|string|max:255',
+            'x1' => 'required|numeric',
+            'y1' => 'required|numeric',
+            'x2' => 'required|numeric',
+            'y2' => 'required|numeric',
+        ]);
+
+        Detection::create($data);
+
+        return redirect()->route('admin.detections.index')->with('success', 'Обнаружение добавлено');
+    }
+
+
+    /**
+     * Просмотр обнаружения
+     */
+    public function show(Detection $detection)
+    {
+
+        return view('admin.detections.show', [
+            'detection' => $detection,
+            'activeRoute' => 'admin.detections.index',
+        ]);
+    }
+
+    /**
+     * Форма редактирования
+     */
+    public function edit(Detection $detection)
+    {
+        $images = Image::all();
+
+        return view('admin.detections.edit', [
+            'detection' => $detection,
+            'images' => $images,
+            'activeRoute' => 'admin.detections.index',
+        ]);
+    }
+
+    /**
+     * Обновление обнаружения
+     */
+    public function update(Request $request, Detection $detection)
+    {
+        $data = $request->validate([
+            'image_id' => 'required|exists:images,id',
+            'target'  => 'required|string|max:255',
+            'x1' => 'required|numeric',
+            'y1' => 'required|numeric',
+            'x2' => 'required|numeric',
+            'y2' => 'required|numeric',
+        ]);
+
+        $detection->update($data);
+
+        return redirect()->route('admin.detections.index')->with('success', 'Обнаружение обновлено');
+    }
+
+    /**
+     * Удаление картинки
+     */
+    public function destroy(Detection $detection)
+    {
+        $detection->delete();
+        return redirect()->route('admin.detections.index')->with('success', 'Обнаружение удалено');
+    }
+}

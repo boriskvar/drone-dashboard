@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('image_id')->constrained()->cascadeOnDelete();
             $table->string('target'); // например "target"
-            $table->integer('x1');
-            $table->integer('y1');
-            $table->integer('x2');
-            $table->integer('y2');
+            $table->decimal('x1', 8, 2);
+            $table->decimal('y1', 8, 2);
+            $table->decimal('x2', 8, 2);
+            $table->decimal('y2', 8, 2);
+
             $table->timestamps();
         });
     }

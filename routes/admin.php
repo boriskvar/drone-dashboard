@@ -6,19 +6,31 @@ use App\Http\Controllers\Admin\AdminTargetController;
 use App\Http\Controllers\Admin\AdminFlightDataController;
 use App\Http\Controllers\Admin\AdminSimulationController;
 use App\Http\Controllers\Admin\AdminImageController;
+use App\Http\Controllers\Admin\AdminDetectionController;
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
 
+        // 🎯 CRUD для обнаружений (detections)
+        Route::prefix('detections')->group(function () {
+            Route::get('/', [AdminDetectionController::class, 'index'])->name('admin.detections.index');
+            Route::get('/create', [AdminDetectionController::class, 'create'])->name('admin.detections.create');
+            Route::post('/', [AdminDetectionController::class, 'store'])->name('admin.detections.store');
+            Route::get('{detection}/edit', [AdminDetectionController::class, 'edit'])->name('admin.detections.edit');
+            Route::put('{detection}', [AdminDetectionController::class, 'update'])->name('admin.detections.update');
+            Route::get('{detection}', [AdminDetectionController::class, 'show'])->name('admin.detections.show');
+            Route::delete('{detection}', [AdminDetectionController::class, 'destroy'])->name('admin.detections.destroy');
+        });
+
         // 🖼️ CRUD для картинок
         Route::prefix('images')->group(function () {
             Route::get('/', [AdminImageController::class, 'index'])->name('admin.images.index');
             Route::get('/create', [AdminImageController::class, 'create'])->name('admin.images.create');
-            Route::post('/store', [AdminImageController::class, 'store'])->name('admin.images.store');
-            Route::get('{image}', [AdminImageController::class, 'show'])->name('admin.images.show');
+            Route::post('/', [AdminImageController::class, 'store'])->name('admin.images.store');
             Route::get('{image}/edit', [AdminImageController::class, 'edit'])->name('admin.images.edit');
             Route::put('{image}', [AdminImageController::class, 'update'])->name('admin.images.update');
+            Route::get('{image}', [AdminImageController::class, 'show'])->name('admin.images.show');
             Route::delete('{image}', [AdminImageController::class, 'destroy'])->name('admin.images.destroy');
         });
 

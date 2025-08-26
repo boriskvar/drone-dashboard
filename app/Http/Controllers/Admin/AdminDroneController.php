@@ -15,7 +15,11 @@ class AdminDroneController extends Controller
     public function index()
     {
         $drones = Drone::paginate(15);
-        return view('admin.drones.index', compact('drones'));
+        // return view('admin.drones.index', compact('drones'));
+        return view('admin.drones.index', [
+            'drones' => $drones,
+            'activeRoute' => 'admin.drones.index',
+        ]);
     }
 
     /**
