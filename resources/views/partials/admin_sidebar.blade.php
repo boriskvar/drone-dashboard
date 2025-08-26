@@ -4,34 +4,25 @@
     <nav class="nav flex-column">
         @php
         $adminMenuItems = [
-        ['title' => 'Дроны', 'url' => route('admin.drones.index'), 'route' => 'admin.drones.index'],
-        ['title' => 'Добавить дрон', 'url' => route('admin.drones.create'), 'route' => 'admin.drones.create'],
-
-        // данные полета
-        ['title' => 'Данные полёта', 'url' => route('admin.flight_data.index'), 'route' =>
-        'admin.flight_data.index'],
-        ['title' => 'Добавить данные полёта', 'url' => route('admin.flight_data.create'), 'route' =>
-        'admin.flight_data.create'],
-
-        // симуляция
-        // ['title' => 'Симуляция', 'url' => route('admin.drones.index') . '#simulation', 'route' =>
-        // 'admin.simulation'],
-        ['title' => 'Симуляция', 'url' => route('admin.simulation.index'), 'route' => 'admin.simulation.index'],
-
-
-
-        // цели
-        ['title' => 'Цели', 'url' => route('admin.targets.index'), 'route' =>
-        'admin.targets.index'],
-        ['title' => 'Добавить цель', 'url' => route('admin.targets.create'), 'route' =>
-        'admin.targets.create'],
+        ['title' => 'Дроны', 'url' => route('admin.drones.index'), 'routes' => ['admin.drones.index',
+        'admin.drones.create', 'admin.drones.edit']],
+        ['title' => 'Данные полёта', 'url' => route('admin.flight_data.index'), 'routes' => ['admin.flight_data.index',
+        'admin.flight_data.create', 'admin.flight_data.edit']],
+        ['title' => 'Симуляция', 'url' => route('admin.simulation.index'), 'routes' => ['admin.simulation.index']],
+        ['title' => 'Картинки', 'url' => route('admin.images.index'), 'routes' => ['admin.images.index',
+        'admin.images.create', 'admin.images.edit', 'admin.images.show']],
+        ['title' => 'Цели', 'url' => route('admin.targets.index'), 'routes' => ['admin.targets.index',
+        'admin.targets.create', 'admin.targets.edit']],
         ];
-
         @endphp
 
         @foreach($adminMenuItems as $item)
+        @php
+        // Если текущий маршрут в списке, делаем подсветку
+        $isActive = in_array($activeRoute, $item['routes']);
+        @endphp
         <a href="{{ $item['url'] }}"
-           class="nav-link text-white mb-2 rounded {{ $activeRoute === $item['route'] ? 'bg-primary' : 'hover-bg-gray-700' }}">
+           class="nav-link text-white mb-2 rounded {{ $isActive ? 'bg-primary' : 'hover-bg-gray-700' }}">
             {{ $item['title'] }}
         </a>
         @endforeach

@@ -5,10 +5,22 @@ use App\Http\Controllers\Admin\AdminDroneController;
 use App\Http\Controllers\Admin\AdminTargetController;
 use App\Http\Controllers\Admin\AdminFlightDataController;
 use App\Http\Controllers\Admin\AdminSimulationController;
+use App\Http\Controllers\Admin\AdminImageController;
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
+
+        // 🖼️ CRUD для картинок
+        Route::prefix('images')->group(function () {
+            Route::get('/', [AdminImageController::class, 'index'])->name('admin.images.index');
+            Route::get('/create', [AdminImageController::class, 'create'])->name('admin.images.create');
+            Route::post('/store', [AdminImageController::class, 'store'])->name('admin.images.store');
+            Route::get('{image}', [AdminImageController::class, 'show'])->name('admin.images.show');
+            Route::get('{image}/edit', [AdminImageController::class, 'edit'])->name('admin.images.edit');
+            Route::put('{image}', [AdminImageController::class, 'update'])->name('admin.images.update');
+            Route::delete('{image}', [AdminImageController::class, 'destroy'])->name('admin.images.destroy');
+        });
 
         // 🚀 Маршруты для симуляции дронов
         Route::prefix('simulation')->name('admin.simulation.')->group(function () {
@@ -48,16 +60,4 @@ Route::middleware(['auth', 'admin'])
             Route::put('{target}', [AdminTargetController::class, 'update'])->name('admin.targets.update');
             Route::delete('{target}', [AdminTargetController::class, 'destroy'])->name('admin.targets.destroy');
         });
-
-        // 🚀 Маршруты для симуляции движения дронов
-        /* Route::prefix('simulation')->name('admin.simulation.')->group(function () {
-            Route::post('start/{drone}', [ApiFlightDataController::class, 'startSimulation'])->name('start');
-            Route::post('stop/{drone}', [ApiFlightDataController::class, 'stopSimulation'])->name('stop');
-        }); */
-
-        // 🚀 Маршруты для симуляции дронов
-        /*  Route::prefix('simulation')->name('admin.simulation.')->group(function () {
-            Route::post('start/{drone}', [AdminSimulationController::class, 'start'])->name('start');
-            Route::post('stop/{drone}', [AdminSimulationController::class, 'stop'])->name('stop');
-        }); */
     });
