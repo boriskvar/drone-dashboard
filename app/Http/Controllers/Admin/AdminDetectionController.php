@@ -57,6 +57,7 @@ class AdminDetectionController extends Controller
      */
     public function show(Detection $detection)
     {
+        // dd($detection->toArray());
 
         return view('admin.detections.show', [
             'detection' => $detection,
