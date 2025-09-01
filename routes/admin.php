@@ -2,15 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminDroneController;
+use App\Http\Controllers\Admin\AdminImageController;
 use App\Http\Controllers\Admin\AdminTargetController;
+use App\Http\Controllers\Admin\AdminDetectionController;
+use App\Http\Controllers\Admin\AdminComparisonController;
 use App\Http\Controllers\Admin\AdminFlightDataController;
 use App\Http\Controllers\Admin\AdminSimulationController;
-use App\Http\Controllers\Admin\AdminImageController;
-use App\Http\Controllers\Admin\AdminDetectionController;
 
 Route::middleware(['auth', 'admin'])
     ->prefix('admin')
     ->group(function () {
+
+        Route::get('/comparison', [AdminComparisonController::class, 'index'])->name('admin.comparison.index');
+        Route::post('/comparison', [AdminComparisonController::class, 'compare'])->name('admin.comparison.compare');
 
         // 🎯 CRUD для обнаружений (detections)
         Route::prefix('detections')->group(function () {
