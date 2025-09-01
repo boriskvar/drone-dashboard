@@ -11,8 +11,7 @@
     @endif
 
     <!-- Форма загрузки новой картинки -->
-    <form action="{{ route('admin.images.store') }}" method="POST" enctype="multipart/form-data"
-          class="mb-3 d-flex gap-2 align-items-center">
+    <form action="{{ route('admin.images.store') }}" method="POST" enctype="multipart/form-data" class="mb-3 d-flex gap-2 align-items-center">
         @csrf
         <input type="file" name="file" class="form-control" required>
         <input type="text" name="title" class="form-control" placeholder="Название (необязательно)">
@@ -41,13 +40,16 @@
                     @endforeach
                 </td>
                 <td class="d-flex flex-wrap gap-1">
+                    {{-- <a href="{{ route('admin.images.show', $img) }}" class="btn btn-sm btn-info">
+                    🔍
+                    </a> --}}
+                    <a href="{{ route('admin.images.show', $img) }}" class="btn btn-sm btn-info">👁</a>
+
                     <!-- Редактировать -->
-                    <a href="{{ route('admin.images.edit', $img) }}" class="btn btn-sm btn-primary"
-                       title="Редактировать">✏️</a>
+                    <a href="{{ route('admin.images.edit', $img) }}" class="btn btn-sm btn-primary" title="Редактировать">✏️</a>
 
                     <!-- Удалить -->
-                    <form action="{{ route('admin.images.destroy', $img) }}" method="POST"
-                          onsubmit="return confirm('Удалить изображение?')">
+                    <form action="{{ route('admin.images.destroy', $img) }}" method="POST" onsubmit="return confirm('Удалить изображение?')">
                         @csrf
                         @method('DELETE')
                         <button class="btn btn-sm btn-danger" title="Удалить">🗑️</button>

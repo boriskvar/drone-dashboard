@@ -7,36 +7,35 @@
     <div class="card-body">
         <p><strong>ID:</strong> {{ $detection->id }}</p>
 
-        <p><strong>Картинка:</strong></p>
         @if($detection->image && $detection->image->path)
         <div style="position: relative; display: inline-block;">
-            <img src="{{ asset('storage/' . $detection->image->path) }}" alt="image" width="500">
+            <img src="{{ asset('storage/' . $detection->image->path) }}" width="400" alt="image">
 
-            <!-- Рамка по координатам -->
+            {{-- Одна рамка --}}
             <div style="
-                    position: absolute;
-                    top: {{ $detection->y1 }}px;
-                    left: {{ $detection->x1 }}px;
-                    width: {{ $detection->x2 - $detection->x1 }}px;
-                    height: {{ $detection->y2 - $detection->y1 }}px;
-                    border: 2px solid red;
-                    background: rgba(255,0,0,0.2);
-                ">
+                position: absolute;
+                top: {{ $detection->y1 }}px;
+                left: {{ $detection->x1 }}px;
+                width: {{ $detection->x2 - $detection->x1 }}px;
+                height: {{ $detection->y2 - $detection->y1 }}px;
+                border: 2px solid red;
+                background: rgba(255,0,0,0.2);
+            ">
                 <span style="
-                        position: absolute;
-                        top: -18px;
-                        left: 0;
-                        background: red;
-                        color: white;
-                        font-size: 12px;
-                        padding: 2px 4px;
-                    ">
+                    position: absolute;
+                    top: -18px;
+                    left: 0;
+                    background: red;
+                    color: white;
+                    font-size: 12px;
+                    padding: 2px 4px;
+                ">
                     {{ $detection->target }}
                 </span>
             </div>
         </div>
         @else
-        —
+        — картинки нет —
         @endif
 
         <p class="mt-3"><strong>Цель:</strong> {{ $detection->target }}</p>
@@ -45,6 +44,6 @@
     </div>
 </div>
 
-<a href="{{ route('admin.detections.edit', $detection) }}" class="btn btn-warning">✏️ Редактировать</a>
-<a href="{{ route('admin.detections.index') }}" class="btn btn-secondary">⬅️ Назад</a>
+<a href="{{ route('admin.detections.edit', $detection) }}" class="btn btn-warning">Редактировать</a>
+<a href="{{ route('admin.detections.index') }}" class="btn btn-secondary">Назад</a>
 @endsection
