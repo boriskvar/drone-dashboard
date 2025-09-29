@@ -29,27 +29,43 @@ class AdminDetectionController extends Controller
     public function create()
     {
         $images = Image::all(); // чтобы выбрать картинку
+        // dd($images->toArray());
         return view('admin.detections.create', compact('images'));
     }
 
     /**
      * Сохранение картинки
      */
-    public function store(Request $request)
+    public function store(Request $request, Image $image)
     {
-        $data = $request->validate([
+        $request->validate([
             'image_id' => 'required|exists:images,id',
-            'target'  => 'required|string|max:255',
+            'target' => 'required|string|max:255',
             'x1' => 'required|numeric',
             'y1' => 'required|numeric',
             'x2' => 'required|numeric',
             'y2' => 'required|numeric',
         ]);
 
-        Detection::create($data);
+        $image = Image::findOrFail($request->image_id);
 
-        return redirect()->route('admin.detections.index')->with('success', 'Обнаружение добавлено');
+        $detection = new Detection([
+            'target' => $request->target,
+            'x1' => $request->x1,
+            'y1' => $request->y1,
+            'x2' => $request->x2,
+            'y2' => $request->y2,
+        ]);
+
+        $image->detections()->save($detection);
+
+        return redirect()->route('admin.images.show', $image)
+            ->with('success', 'Обнаружение добавлено!');
     }
+
+
+
+
 
 
     /**

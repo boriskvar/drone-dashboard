@@ -9,10 +9,7 @@
                   @drone-selected="onDroneSelected" />
 
     <!-- Линии треков -->
-    <TrackPolylines
-                    v-if="map"
-                    :map="map"
-                    :drones="drones" />
+    <TrackPolylines v-if="map" :map="map" :drones="drones" />
 
     <!-- Маркеры целей, передаём выбранного дрона -->
     <TargetMarkers
@@ -32,8 +29,8 @@ import TargetMarkers from "./TargetMarkers.vue";
 const props = defineProps({
     initialDrones: {
         type: Array,
-        default: () => []
-    }
+        default: () => [],
+    },
 });
 
 const map = ref(null);

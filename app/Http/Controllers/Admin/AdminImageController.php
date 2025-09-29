@@ -14,10 +14,11 @@ class AdminImageController extends Controller
      */
     public function index()
     {
-        $images = Image::latest()->paginate(20);
+        // $images = Image::latest()->paginate(20);
+        $images = Image::paginate(20);
 
         return view('admin.images.index', [
-            'images' => $images,
+            'images'      => $images,
             'activeRoute' => 'admin.images.index',
         ]);
     }
@@ -45,9 +46,14 @@ class AdminImageController extends Controller
         // Загружаем файл
         $path = $request->file('file')->store('images', 'public');
 
+        // Получаем реальные размеры картинки
+        [$width, $height] = getimagesize($request->file('file'));
+
         $image = Image::create([
-            'title' => $validated['title'] ?? null,
-            'path'  => $path,
+            'title'  => $validated['title'] ?? null,
+            'path'   => $path,
+            'width'  => $width,
+            'height' => $height,
         ]);
 
         return redirect()->route('admin.images.index')
@@ -60,7 +66,7 @@ class AdminImageController extends Controller
     public function show(Image $image)
     {
         return view('admin.images.show', [
-            'image' => $image,
+            'image'       => $image,
             'activeRoute' => 'admin.images.index',
         ]);
     }
@@ -71,7 +77,7 @@ class AdminImageController extends Controller
     public function edit(Image $image)
     {
         return view('admin.images.edit', [
-            'image' => $image,
+            'image'       => $image,
             'activeRoute' => 'admin.images.index',
         ]);
     }
@@ -92,7 +98,7 @@ class AdminImageController extends Controller
                 Storage::disk('public')->delete($image->path);
             }
 
-            $path = $request->file('file')->store('images', 'public');
+            $path        = $request->file('file')->store('images', 'public');
             $image->path = $path;
         }
 

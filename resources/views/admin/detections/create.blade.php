@@ -1,61 +1,133 @@
 @extends('layouts.admin')
 
-@section('title', 'Добавить обнаружение')
-
 @section('content')
-<div class="container mt-4">
-    <h2>Добавить новое обнаружение</h2>
+  <h2>Добавить обнаружение</h2>
 
+  <form method="POST" action="{{ route('admin.detections.store') }}">
+    @csrf
 
+    {{-- 1️⃣ Выпадающий список картинок --}}
+    <div class="mb-3">
+      <label for="image_id" class="form-label">Картинка</label>
+      <select name="image_id"
+              id="image_id"
+              class="form-select"
+              required>
+        <option value="">— выберите картинку —</option>
+        @foreach ($images as $img)
+          <option value="{{ $img->id }}" data-path="{{ asset('storage/' . $img->path) }}">
+            #{{ $img->id }} — {{ $img->title ?? $img->path }}
+          </option>
+        @endforeach
+      </select>
+    </div>
 
-    <form action="{{ route('admin.detections.store') }}" method="POST">
-        @csrf
+    {{-- 2️⃣ Поле для цели --}}
+    <div class="mb-3">
+      <label for="target" class="form-label">Цель</label>
+      <input type="text"
+             name="target"
+             id="target"
+             class="form-control"
+             required>
+    </div>
 
-        <div class="mb-3">
-            <label for="image_id" class="form-label">Картинка</label>
-            <select name="image_id" id="image_id" class="form-select" required>
-                @foreach($images as $img)
-                <option value="{{ $img->id }}">{{ $img->id }} — {{ $img->path }}</option>
-                @endforeach
-            </select>
-        </div>
+    {{-- 3️⃣ Картинка + Canvas --}}
+    <div class="mb-3" style="position: relative; display: inline-block;">
+      <img id="preview-img"
+           src=""
+           alt="preview"
+           style="max-width: 100%; display: none;">
 
-        <div class="mb-3">
-            <label for="target" class="form-label">Цель</label>
-            <input type="text" name="target" id="target" class="form-control" required>
-        </div>
+      <canvas id="canvas" style="position: absolute; top: 0; left: 0; display: none; border:1px solid #ccc;">
+      </canvas>
+    </div>
 
-        <div class="mb-3">
-            <p class="text-muted">
-                Координаты рамки цели на изображении:<br>
-                <strong>(x1, y1)</strong> — верхний левый угол,
-                <strong>(x2, y2)</strong> — нижний правый угол.
-            </p>
+    {{-- 4️⃣ Скрытые поля для координат --}}
+    <input type="hidden"
+           name="x1"
+           id="x1">
+    <input type="hidden"
+           name="y1"
+           id="y1">
+    <input type="hidden"
+           name="x2"
+           id="x2">
+    <input type="hidden"
+           name="y2"
+           id="y2">
 
-            <div class="row">
-                <div class="col">
-                    <label for="x1">x1</label>
-                    <input type="number" step="any" name="x1" id="x1" class="form-control" required>
-                </div>
-                <div class="col">
-                    <label for="y1">y1</label>
-                    <input type="number" step="any" name="y1" id="y1" class="form-control" required>
-                </div>
-                <div class="col">
-                    <label for="x2">x2</label>
-                    <input type="number" step="any" name="x2" id="x2" class="form-control" required>
-                </div>
-                <div class="col">
-                    <label for="y2">y2</label>
-                    <input type="number" step="any" name="y2" id="y2" class="form-control" required>
-                </div>
-            </div>
-        </div>
+    {{-- 5️⃣ Кнопка отправки --}}
+    <button type="submit" class="btn btn-primary mt-2">Сохранить</button>
+  </form>
+@endsection
 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Сохранить</button>
-            <a href="{{ route('admin.detections.index') }}" class="btn btn-secondary">Назад</a>
-        </div>
-    </form>
-</div>
+@section('scripts')
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const select = document.getElementById("image_id");
+      const preview = document.getElementById("preview-img");
+      const canvas = document.getElementById("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const x1 = document.getElementById("x1");
+      const y1 = document.getElementById("y1");
+      const x2 = document.getElementById("x2");
+      const y2 = document.getElementById("y2");
+
+      /* 👉 Когда выбираем картинку */
+      select.addEventListener("change", () => {
+        const option = select.options[select.selectedIndex];
+        const url = option.dataset.path;
+
+        if (url) {
+          preview.src = url;
+          preview.style.display = "block";
+
+          preview.onload = () => {
+            canvas.width = preview.width;
+            canvas.height = preview.height;
+            canvas.style.display = "block";
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+          };
+        }
+      });
+
+      /* 👉 Рисование рамки */
+      let drawing = false;
+      let startX, startY;
+
+      canvas.addEventListener("mousedown", (e) => {
+        drawing = true;
+        const rect = canvas.getBoundingClientRect();
+        startX = e.clientX - rect.left;
+        startY = e.clientY - rect.top;
+      });
+
+      canvas.addEventListener("mousemove", (e) => {
+        if (!drawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const currentX = e.clientX - rect.left;
+        const currentY = e.clientY - rect.top;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(startX, startY, currentX - startX, currentY - startY);
+      });
+
+      canvas.addEventListener("mouseup", (e) => {
+        drawing = false;
+        const rect = canvas.getBoundingClientRect();
+        const endX = e.clientX - rect.left;
+        const endY = e.clientY - rect.top;
+
+        // сохраняем координаты
+        x1.value = Math.round(startX);
+        y1.value = Math.round(startY);
+        x2.value = Math.round(endX);
+        y2.value = Math.round(endY);
+      });
+    });
+  </script>
 @endsection
