@@ -59,6 +59,10 @@
 
     {{-- 5️⃣ Кнопка отправки --}}
     <button type="submit" class="btn btn-primary mt-2">Сохранить</button>
+    <button type="button"
+            id="reset-btn"
+            class="btn btn-secondary mt-2">Отмена</button>
+
   </form>
 @endsection
 
@@ -104,6 +108,7 @@
         startY = e.clientY - rect.top;
       });
 
+      //`mousemove` — пока рисуем
       canvas.addEventListener("mousemove", (e) => {
         if (!drawing) return;
         const rect = canvas.getBoundingClientRect();
@@ -114,20 +119,46 @@
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
         ctx.strokeRect(startX, startY, currentX - startX, currentY - startY);
+
+        // 🔹 Полупрозрачная заливка внутри рамки
+        ctx.fillStyle = "rgba(255, 0, 0, 0.2)";
+        ctx.fillRect(startX, startY, currentX - startX, currentY - startY);
       });
 
+      // `mouseup` — фиксируем рамку
       canvas.addEventListener("mouseup", (e) => {
         drawing = false;
         const rect = canvas.getBoundingClientRect();
         const endX = e.clientX - rect.left;
         const endY = e.clientY - rect.top;
 
-        // сохраняем координаты
+        // Записываем координаты в hidden inputs
         x1.value = Math.round(startX);
         y1.value = Math.round(startY);
         x2.value = Math.round(endX);
         y2.value = Math.round(endY);
+
+        // 👉 оставляем рамку + заливку после отпускания мыши
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(startX, startY, endX - startX, endY - startY);
+
+        ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // красная заливка с прозрачностью
+        ctx.fillRect(startX, startY, endX - startX, endY - startY);
       });
+
+      // Кнопка "Отмена" — сброс
+      document.getElementById("reset-btn").addEventListener("click", () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // очищаем координаты
+        x1.value = "";
+        y1.value = "";
+        x2.value = "";
+        y2.value = "";
+      });
+
     });
   </script>
 @endsection
